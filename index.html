@@ -3,198 +3,304 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Peter — Afternoon Walk</title>
-<meta name="description" content="Strava, but for a guy on a totally normal walk in the park." />
+<title>Peter Pro — A walk in the park.</title>
+<meta name="description" content="Introducing Peter Pro. The most advanced walk in the park. Ever. He does not know about this page." />
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚶</text></svg>" />
 <style>
   :root{
-    --orange:#fc4c02; --orange-d:#e5430a; --ink:#1c1c22; --muted:#6b6b78;
-    --line:#e9e9ee; --card:#ffffff; --bg:#f4f5f7; --soft:#f8f8fa;
+    --blue:#0071e3; --blue-d:#0060c8; --link:#0066cc; --sky:#2997ff;
+    --ink:#1d1d1f; --muted:#6e6e73; --hair:#d2d2d7;
+    --gray:#f5f5f7; --white:#fff;
     --mono:'SF Mono',ui-monospace,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',Helvetica,Arial,sans-serif;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%}
-  body{
-    background:var(--bg);color:var(--ink);
-    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,sans-serif;
-    -webkit-font-smoothing:antialiased;
-    display:flex;justify-content:center;padding:20px 16px 40px;
-  }
-  .app{width:100%;max-width:480px}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);color:var(--ink);background:var(--white);
+    -webkit-font-smoothing:antialiased;line-height:1.5}
+  a{color:var(--link);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:980px;margin:0 auto;padding:0 22px}
+  .blue{color:var(--blue)}
+  .grad{background:linear-gradient(92deg,#2997ff 0%,#0071e3 48%,#6e5bff 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent}
 
-  /* header */
-  .head{display:flex;align-items:center;gap:11px;margin-bottom:14px}
-  .ava{width:46px;height:46px;border-radius:50%;flex:none;
-    background:linear-gradient(135deg,#ff7a3d,var(--orange));
-    display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:20px;
-    box-shadow:0 4px 12px -4px rgba(252,76,2,.5)}
-  .who .n{font-weight:800;font-size:15px;line-height:1.2}
-  .who .s{font-size:12.5px;color:var(--muted);margin-top:1px}
-  .follow{margin-left:auto;border:1.5px solid var(--orange);color:var(--orange);
-    background:#fff;font-weight:800;font-size:12px;border-radius:999px;padding:7px 14px;cursor:pointer}
-  .follow.on{background:var(--orange);color:#fff}
+  /* global nav */
+  .nav{position:sticky;top:0;z-index:50;height:44px;
+    background:rgba(251,251,253,.78);backdrop-filter:saturate(180%) blur(20px);
+    border-bottom:1px solid rgba(0,0,0,.08)}
+  .nav .row{max-width:980px;margin:0 auto;height:44px;display:flex;align-items:center;
+    gap:0;padding:0 22px;font-size:12px;color:#1d1d1fcc}
+  .nav a{color:#1d1d1fcc;font-weight:400;padding:0 11px;line-height:44px}
+  .nav a:hover{color:#1d1d1f;text-decoration:none}
+  .nav .logo{font-size:17px;padding-right:14px}
+  .nav .sp{flex:1}
+  .nav .ico{font-size:13px;padding:0 9px}
+  @media(max-width:720px){.nav .hidem{display:none}}
 
-  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;
-    box-shadow:0 1px 2px rgba(20,20,40,.04),0 12px 30px -22px rgba(20,20,40,.4);overflow:hidden}
-  .title{padding:14px 16px 10px}
-  .title h1{font-size:19px;font-weight:800;letter-spacing:-.2px}
-  .title .meta{font-size:12.5px;color:var(--muted);margin-top:3px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-  .pill{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10.5px;
-    font-weight:600;padding:3px 8px;border-radius:999px;background:#eef6ee;color:#2e7d32}
-  .pill .d{width:6px;height:6px;border-radius:50%;background:#2e7d32;animation:blink 1.3s infinite}
+  /* product sub-nav */
+  .subnav{position:sticky;top:44px;z-index:49;height:48px;
+    background:rgba(251,251,253,.82);backdrop-filter:saturate(180%) blur(20px);
+    border-bottom:1px solid rgba(0,0,0,.1)}
+  .subnav .row{max-width:980px;margin:0 auto;height:48px;display:flex;align-items:center;padding:0 22px}
+  .subnav .pname{font-size:21px;font-weight:600;letter-spacing:-.01em}
+  .subnav .links{display:flex;gap:0;margin-left:26px;flex:1}
+  .subnav .links a{font-size:12px;color:var(--muted);padding:0 11px}
+  .subnav .links a:hover{color:var(--ink);text-decoration:none}
+  .buy{background:var(--blue);color:#fff!important;font-size:12px;font-weight:500;
+    padding:5px 14px;border-radius:980px;line-height:1.4;cursor:pointer;border:0}
+  .buy:hover{background:var(--blue-d);text-decoration:none!important}
+  .buy.done{background:#34c759}
+  @media(max-width:720px){.subnav .links{display:none}}
 
-  /* map */
-  .mapwrap{position:relative;background:#e9f1e3;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  /* hero */
+  .hero{text-align:center;padding:54px 22px 30px;background:var(--white)}
+  .eyebrow{color:var(--blue);font-size:21px;font-weight:600;letter-spacing:-.01em}
+  .hero h1{font-size:clamp(40px,8vw,72px);font-weight:700;letter-spacing:-.02em;line-height:1.04;margin:6px 0 4px}
+  .hero .tag{font-size:clamp(21px,4.4vw,30px);font-weight:600;letter-spacing:-.01em;line-height:1.12}
+  .hero .sub{color:var(--muted);font-size:17px;margin-top:16px}
+  .hero .links{margin-top:14px;font-size:17px;display:flex;gap:26px;justify-content:center;flex-wrap:wrap}
+  .hero .links a::after{content:' ›'}
+  .price{color:var(--muted);font-size:13px;margin-top:18px}
+
+  /* showcase */
+  .stage{background:var(--gray);padding:30px 22px 40px;text-align:center}
+  .device{max-width:480px;margin:0 auto;background:#fff;border-radius:22px;overflow:hidden;
+    box-shadow:0 2px 6px rgba(0,0,0,.04),0 30px 60px -30px rgba(0,0,0,.35);border:1px solid rgba(0,0,0,.06)}
+  .mapwrap{position:relative;background:#e7f0df}
   svg.map{display:block;width:100%;height:auto}
-  .status{position:absolute;left:10px;top:10px;background:rgba(28,28,34,.82);color:#fff;
-    font-family:var(--mono);font-size:11px;padding:5px 10px;border-radius:8px;backdrop-filter:blur(3px);
-    max-width:84%}
-  .ach{position:absolute;right:10px;bottom:10px;background:rgba(255,255,255,.94);
-    border:1px solid var(--line);font-size:11px;font-weight:700;color:#8a5a00;
+  .status{position:absolute;left:10px;top:10px;background:rgba(0,0,0,.72);color:#fff;
+    font-family:var(--mono);font-size:11px;padding:5px 10px;border-radius:8px;backdrop-filter:blur(3px);max-width:82%}
+  .livepill{position:absolute;right:10px;top:10px;background:rgba(255,255,255,.92);
+    font-family:var(--mono);font-size:10px;font-weight:700;color:var(--blue);padding:4px 9px;border-radius:999px;
+    display:flex;align-items:center;gap:5px;border:1px solid rgba(0,0,0,.06)}
+  .livepill .d{width:6px;height:6px;border-radius:50%;background:var(--blue);animation:blink 1.3s infinite}
+  .ach{position:absolute;right:10px;bottom:10px;background:rgba(255,255,255,.95);
+    border:1px solid rgba(0,0,0,.08);font-size:11px;font-weight:600;color:#0060c8;
     padding:5px 9px;border-radius:8px;display:none;align-items:center;gap:5px}
   .ach.show{display:flex}
-
-  /* stats */
-  .stats{display:grid;grid-template-columns:repeat(4,1fr)}
-  .stats .st{padding:12px 10px;text-align:center;border-right:1px solid var(--line)}
-  .stats .st:last-child{border-right:0}
-  .st .v{font-size:18px;font-weight:800;letter-spacing:-.3px;font-variant-numeric:tabular-nums}
-  .st .v small{font-size:11px;font-weight:700;color:var(--muted);margin-left:1px}
-  .st .k{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-top:2px}
-
-  .social{display:flex;align-items:center;gap:16px;padding:10px 16px;border-top:1px solid var(--line);
+  .reax{display:flex;align-items:center;gap:14px;padding:11px 16px;border-top:1px solid var(--hair);
     font-size:13px;color:var(--muted)}
-  .social b{color:var(--ink)}
-  .social .kudos{cursor:pointer;user-select:none}
+  .reax b{color:var(--ink)}
+  .reax .kudos{cursor:pointer;user-select:none}
+  .cap{color:var(--muted);font-size:13px;margin-top:16px}
 
-  /* controls */
-  .ctrl{display:flex;gap:8px;margin:14px 0 10px}
-  .ctrl button{flex:1;border:1px solid var(--line);background:#fff;border-radius:11px;
-    padding:11px;font-weight:800;font-size:13px;cursor:pointer;color:var(--ink);transition:.12s}
-  .ctrl button:hover{background:var(--soft)}
-  .ctrl button.primary{background:var(--orange);border-color:var(--orange);color:#fff}
-  .ctrl button.primary:hover{background:var(--orange-d)}
+  .ctrl{max-width:480px;margin:16px auto 0;display:flex;gap:8px}
+  .ctrl button{flex:1;border:1px solid var(--hair);background:#fff;border-radius:980px;
+    padding:9px;font-weight:500;font-size:13px;cursor:pointer;color:var(--ink)}
+  .ctrl button:hover{background:#fafafc}
+  .ctrl button.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+  .ctrl button.primary:hover{background:var(--blue-d)}
 
-  /* feed */
-  .feedhdr{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);
-    margin:18px 4px 8px;display:flex;align-items:center;gap:8px}
-  .feedhdr::after{content:'';flex:1;height:1px;background:var(--line)}
-  .feed{list-style:none}
-  .ev{display:flex;gap:11px;padding:11px 12px;background:#fff;border:1px solid var(--line);
-    border-radius:12px;margin-bottom:8px;align-items:flex-start;animation:rise .35s ease}
-  .ev .ic{width:34px;height:34px;border-radius:9px;background:var(--soft);display:flex;
-    align-items:center;justify-content:center;font-size:18px;flex:none}
+  /* statements */
+  .statement{padding:80px 22px;text-align:center}
+  .statement h2{font-size:clamp(30px,6vw,52px);font-weight:700;letter-spacing:-.02em;line-height:1.07;
+    max-width:780px;margin:0 auto}
+  .statement p{color:var(--muted);font-size:19px;margin:16px auto 0;max-width:600px}
+  .statement .links{margin-top:16px;font-size:18px}
+  .statement .links a::after{content:' ›'}
+  .statement.alt{background:var(--gray)}
+
+  /* tech specs */
+  .specs{background:#fff;padding:64px 22px;border-top:1px solid var(--hair)}
+  .specs h2{text-align:center;font-size:clamp(28px,5vw,40px);font-weight:700;letter-spacing:-.02em;margin-bottom:8px}
+  .specs .note{text-align:center;color:var(--muted);font-size:15px;margin-bottom:34px}
+  .specgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;max-width:760px;margin:0 auto 30px;
+    border:1px solid var(--hair);border-radius:16px;overflow:hidden}
+  .specgrid .b{padding:20px 14px;text-align:center;border-right:1px solid var(--hair)}
+  .specgrid .b:last-child{border-right:0}
+  .specgrid .v{font-size:24px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .specgrid .v small{font-size:13px;font-weight:600;color:var(--muted)}
+  .specgrid .k{font-size:12px;color:var(--muted);margin-top:4px}
+  .specrows{max-width:680px;margin:0 auto}
+  .specrow{display:flex;justify-content:space-between;gap:20px;padding:16px 4px;border-top:1px solid var(--hair);font-size:15px}
+  .specrow .l{color:var(--muted)}.specrow .r{font-weight:600;text-align:right}
+  @media(max-width:620px){.specgrid{grid-template-columns:repeat(2,1fr)}
+    .specgrid .b:nth-child(2){border-right:0}.specgrid .b:nth-child(1),.specgrid .b:nth-child(2){border-bottom:1px solid var(--hair)}}
+
+  /* history */
+  .history{background:var(--gray);padding:64px 22px}
+  .history h2{text-align:center;font-size:clamp(28px,5vw,40px);font-weight:700;letter-spacing:-.02em}
+  .history .note{text-align:center;color:var(--muted);font-size:15px;margin:8px 0 30px}
+  .feed{list-style:none;max-width:600px;margin:0 auto}
+  .ev{display:flex;gap:13px;padding:15px 16px;background:#fff;border:1px solid rgba(0,0,0,.06);
+    border-radius:16px;margin-bottom:10px;align-items:flex-start;animation:rise .35s ease}
+  .ev .ic{width:38px;height:38px;border-radius:11px;background:var(--gray);display:flex;
+    align-items:center;justify-content:center;font-size:20px;flex:none}
   .ev .body{flex:1;min-width:0}
   .ev .top{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
-  .ev .nm{font-weight:800;font-size:14px}
+  .ev .nm{font-weight:600;font-size:15px}
   .ev .tm{font-family:var(--mono);font-size:11px;color:var(--muted);flex:none}
-  .ev .nt{font-size:13px;color:var(--muted);margin-top:2px;line-height:1.4}
-  .ev .dm{font-family:var(--mono);font-size:11px;color:var(--orange);font-weight:700;margin-top:4px}
+  .ev .nt{font-size:14px;color:var(--muted);margin-top:2px;line-height:1.4}
+  .ev .dm{font-family:var(--mono);font-size:11px;color:var(--blue);font-weight:600;margin-top:5px}
 
-  .foot{text-align:center;font-family:var(--mono);font-size:10.5px;color:#9a9aa6;margin-top:18px;line-height:1.7}
+  /* footer */
+  footer{background:var(--gray);color:var(--muted);font-size:12px;line-height:1.5;
+    border-top:1px solid var(--hair);padding:24px 22px 40px}
+  footer .legal{max-width:980px;margin:0 auto;border-bottom:1px solid var(--hair);padding-bottom:18px}
+  footer .legal p{margin-bottom:9px}
+  footer .cols{max-width:980px;margin:18px auto 0;display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  footer .cols h4{color:var(--ink);font-size:12px;margin-bottom:8px}
+  footer .cols a{color:var(--muted);display:block;padding:3px 0}
+  footer .copy{max-width:980px;margin:20px auto 0;border-top:1px solid var(--hair);padding-top:14px}
+  @media(max-width:620px){footer .cols{grid-template-columns:repeat(2,1fr)}}
 
   @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
   @keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 </style>
 </head>
 <body>
-<div class="app">
 
-  <div class="head">
-    <div class="ava">P</div>
-    <div class="who">
-      <div class="n">Peter</div>
-      <div class="s">Fairmount Park · Philadelphia</div>
+  <!-- global nav (parody) -->
+  <nav class="nav"><div class="row">
+    <span class="logo">🚶</span>
+    <a href="#" class="hidem">Store</a>
+    <a href="#specs" class="hidem">Whereabouts</a>
+    <a href="#history" class="hidem">History</a>
+    <a href="#specs" class="hidem">Tech Specs</a>
+    <a href="#" class="hidem">Park</a>
+    <a href="#" class="hidem">Support</a>
+    <span class="sp"></span>
+    <span class="ico">🔍</span><span class="ico">🛍️</span>
+  </div></nav>
+
+  <!-- product sub-nav -->
+  <div class="subnav"><div class="row">
+    <span class="pname">Peter <span style="font-weight:400">Pro</span></span>
+    <div class="links">
+      <a href="#stage">Overview</a>
+      <a href="#specs">Tech Specs</a>
+      <a href="#history">Where He's Been</a>
     </div>
-    <button class="follow" id="follow">Follow</button>
-  </div>
+    <button class="buy" id="follow">Buy</button>
+  </div></div>
 
-  <div class="card">
-    <div class="title">
-      <h1 id="actTitle">Afternoon Walk</h1>
-      <div class="meta">
-        <span id="actDate">Today · a normal day</span>
-        <span class="pill"><span class="d"></span><span id="liveState">LIVE</span></span>
+  <!-- hero -->
+  <section class="hero">
+    <div class="eyebrow">Peter Pro</div>
+    <h1>A walk <span class="grad">in the park.</span></h1>
+    <div class="tag">Literally. That's the whole thing.</div>
+    <div class="sub">The most advanced human we've ever convinced to go outside.</div>
+    <div class="links">
+      <a href="#stage">Watch him live</a>
+      <a href="#specs">See where he's been</a>
+    </div>
+    <div class="price">From $0/mo. for 36&nbsp;mo.* &nbsp;·&nbsp; Peter is not, and never will be, aware of this page.</div>
+  </section>
+
+  <!-- showcase / live tracker -->
+  <section class="stage" id="stage">
+    <div class="device">
+      <div class="mapwrap">
+        <svg class="map" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="300" fill="#e7f0df"/>
+          <g id="scenery"></g>
+          <ellipse cx="300" cy="120" rx="40" ry="25" fill="#bfe0f0" stroke="#a3cee0" stroke-width="2"/>
+          <ellipse cx="293" cy="116" rx="4" ry="2.6" fill="#7a8b6a"/>
+          <ellipse cx="308" cy="126" rx="4" ry="2.6" fill="#7a8b6a"/>
+          <g fill="none" stroke="#dfd7c6" stroke-width="9" stroke-linecap="round">
+            <path d="M50,265 C70,215 92,205 110,185 C132,150 140,105 150,70 C190,52 212,54 230,55 C285,56 330,58 350,60"/>
+            <path d="M110,185 C150,175 180,168 200,165 C250,160 285,150 300,120"/>
+            <path d="M200,165 C250,175 300,200 320,215 C340,228 348,245 350,255"/>
+            <path d="M300,120 C330,95 345,78 350,60"/>
+            <path d="M150,70 C120,82 95,95 70,110"/>
+          </g>
+          <g fill="none" stroke="#f3eee2" stroke-width="5" stroke-linecap="round">
+            <path d="M50,265 C70,215 92,205 110,185 C132,150 140,105 150,70 C190,52 212,54 230,55 C285,56 330,58 350,60"/>
+            <path d="M110,185 C150,175 180,168 200,165 C250,160 285,150 300,120"/>
+            <path d="M200,165 C250,175 300,200 320,215 C340,228 348,245 350,255"/>
+            <path d="M300,120 C330,95 345,78 350,60"/>
+            <path d="M150,70 C120,82 95,95 70,110"/>
+          </g>
+          <polyline id="trail" fill="none" stroke="#0071e3" stroke-width="3.4"
+            stroke-linejoin="round" stroke-linecap="round" opacity="0.92" points=""/>
+          <g id="marks"></g>
+          <g id="me" transform="translate(50,265)">
+            <circle r="6" fill="#0071e3" opacity="0.35">
+              <animate attributeName="r" values="6;17" dur="1.6s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="0.5;0" dur="1.6s" repeatCount="indefinite"/>
+            </circle>
+            <circle r="6" fill="#0071e3" stroke="#fff" stroke-width="2.5"/>
+          </g>
+        </svg>
+        <div class="status" id="status">Lacing up…</div>
+        <div class="livepill"><span class="d"></span><span id="liveState">LIVE</span></div>
+        <div class="ach" id="ach"><span>🏆</span><span id="achTxt"></span></div>
+      </div>
+      <div class="reax">
+        <span class="kudos" id="kudos">👍 <b id="kCount">3</b> Likes</span>
+        <span>💬 <b>1</b></span>
+        <span style="margin-left:auto;font-style:italic" id="comment">"It just works." — nobody</span>
       </div>
     </div>
-
-    <div class="mapwrap">
-      <svg class="map" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-        <rect width="400" height="300" fill="#e7f0df"/>
-        <!-- trees / shrubs -->
-        <g id="scenery"></g>
-        <!-- pond -->
-        <ellipse cx="300" cy="120" rx="40" ry="25" fill="#bfe0f0" stroke="#a3cee0" stroke-width="2"/>
-        <ellipse cx="293" cy="116" rx="4" ry="2.6" fill="#7a8b6a"/>
-        <ellipse cx="308" cy="126" rx="4" ry="2.6" fill="#7a8b6a"/>
-        <!-- park paths (decorative) -->
-        <g fill="none" stroke="#dfd7c6" stroke-width="9" stroke-linecap="round">
-          <path d="M50,265 C70,215 92,205 110,185 C132,150 140,105 150,70 C190,52 212,54 230,55 C285,56 330,58 350,60"/>
-          <path d="M110,185 C150,175 180,168 200,165 C250,160 285,150 300,120"/>
-          <path d="M200,165 C250,175 300,200 320,215 C340,228 348,245 350,255"/>
-          <path d="M300,120 C330,95 345,78 350,60"/>
-          <path d="M150,70 C120,82 95,95 70,110"/>
-        </g>
-        <g fill="none" stroke="#f3eee2" stroke-width="5" stroke-linecap="round">
-          <path d="M50,265 C70,215 92,205 110,185 C132,150 140,105 150,70 C190,52 212,54 230,55 C285,56 330,58 350,60"/>
-          <path d="M110,185 C150,175 180,168 200,165 C250,160 285,150 300,120"/>
-          <path d="M200,165 C250,175 300,200 320,215 C340,228 348,245 350,255"/>
-          <path d="M300,120 C330,95 345,78 350,60"/>
-          <path d="M150,70 C120,82 95,95 70,110"/>
-        </g>
-        <!-- Peter's GPS trail -->
-        <polyline id="trail" fill="none" stroke="#fc4c02" stroke-width="3.4"
-          stroke-linejoin="round" stroke-linecap="round" opacity="0.9" points=""/>
-        <!-- landmark markers -->
-        <g id="marks"></g>
-        <!-- current position -->
-        <g id="me" transform="translate(50,265)">
-          <circle r="6" fill="#fc4c02" opacity="0.35">
-            <animate attributeName="r" values="6;17" dur="1.6s" repeatCount="indefinite"/>
-            <animate attributeName="opacity" values="0.5;0" dur="1.6s" repeatCount="indefinite"/>
-          </circle>
-          <circle r="6" fill="#fc4c02" stroke="#fff" stroke-width="2.5"/>
-        </g>
-      </svg>
-      <div class="status" id="status">Lacing up…</div>
-      <div class="ach" id="ach"><span>🏆</span><span id="achTxt"></span></div>
+    <div class="cap"><span id="actTitle">Afternoon Walk</span> · <span id="actDate">a normal day</span>. Shown actual size, actual aimlessness.</div>
+    <div class="ctrl">
+      <button class="primary" id="pause">⏸ Pause</button>
+      <button id="speed">⏩ 1×</button>
+      <button id="reset">↺ Reset</button>
     </div>
+  </section>
 
-    <div class="stats">
-      <div class="st"><div class="v" id="sDist">0.00<small>mi</small></div><div class="k">Distance</div></div>
-      <div class="st"><div class="v" id="sTime">0:00</div><div class="k">Moving</div></div>
-      <div class="st"><div class="v" id="sPace">—</div><div class="k">Pace</div></div>
-      <div class="st"><div class="v" id="sElev">0<small>ft</small></div><div class="k">Elev Gain</div></div>
+  <!-- statements -->
+  <section class="statement">
+    <h2>Goes everywhere.<br/><span class="grad">Accomplishes nothing.</span></h2>
+    <p>Ten landmarks. Zero objectives. Peter visits them all, in no particular order, for no particular reason.</p>
+    <div class="links"><a href="#history">Follow the trail</a></div>
+  </section>
+
+  <section class="statement alt">
+    <h2>All-day battery life.†</h2>
+    <p>Peter will not go home. He has been "five minutes away" for over an hour. The walk continues even when you close this tab — his trail is saved right here on your device.</p>
+  </section>
+
+  <!-- tech specs -->
+  <section class="specs" id="specs">
+    <h2>Tech Specs</h2>
+    <div class="note">Live telemetry, updated continuously, without his knowledge.</div>
+    <div class="specgrid">
+      <div class="b"><div class="v" id="sDist">0.00<small>mi</small></div><div class="k">Distance</div></div>
+      <div class="b"><div class="v" id="sTime">0:00</div><div class="k">Moving Time</div></div>
+      <div class="b"><div class="v" id="sPace">—</div><div class="k">Pace</div></div>
+      <div class="b"><div class="v" id="sElev">0<small>ft</small></div><div class="k">Elevation</div></div>
     </div>
-
-    <div class="social">
-      <span class="kudos" id="kudos">👍 <b id="kCount">3</b> kudos</span>
-      <span>💬 <b>1</b></span>
-      <span style="margin-left:auto;font-style:italic" id="comment">"why" — your mom</span>
+    <div class="specrows">
+      <div class="specrow"><span class="l">Chip</span><span class="r">A17 Pro (it's just his phone)</span></div>
+      <div class="specrow"><span class="l">Display</span><span class="r">One. His face. Currently blank.</span></div>
+      <div class="specrow"><span class="l">Connectivity</span><span class="r">Left on read</span></div>
+      <div class="specrow"><span class="l">Water Resistance</span><span class="r">Cried once, in 2019</span></div>
+      <div class="specrow"><span class="l">Operating System</span><span class="r">Vibes 18</span></div>
+      <div class="specrow"><span class="l">In the Box</span><span class="r">A pretzel, $6, regret</span></div>
     </div>
-  </div>
+  </section>
 
-  <div class="ctrl">
-    <button class="primary" id="pause">⏸ Pause</button>
-    <button id="speed">⏩ 1×</button>
-    <button id="reset">↺ Reset</button>
-  </div>
+  <!-- history -->
+  <section class="history" id="history">
+    <h2>Where he's been</h2>
+    <div class="note">Everywhere. The lines stay on the map.</div>
+    <ul class="feed" id="feed"></ul>
+  </section>
 
-  <div class="feedhdr">History — everywhere he's been</div>
-  <ul class="feed" id="feed"></ul>
-
-  <div class="foot">
-    Peter Walk™ · He does not know he is being tracked<br/>
-    Trail saved to this device — the lines stay even after you close the tab
-  </div>
-</div>
+  <!-- footer -->
+  <footer>
+    <div class="legal">
+      <p>* Pricing shown for comedic purposes. Peter is a human being and is not for sale, lease, or trade-in.</p>
+      <p>† Battery life varies with use, snack availability, and whether anyone texts him back. Peter has not consented to being tracked and remains unaware that this page exists.</p>
+      <p>Trail and history data are stored only on your device. "Peter Pro," "Local Legend," and "It just works" are not trademarks of anyone, least of all Peter. This is a parody and is not affiliated with, endorsed by, or in any way connected to Apple Inc. or Peter.</p>
+    </div>
+    <div class="cols">
+      <div><h4>Shop Peter</h4><a href="#">Buy Peter</a><a href="#">Peter for Business</a><a href="#">Peter Trade In</a></div>
+      <div><h4>Whereabouts</h4><a href="#stage">Live Tracker</a><a href="#history">Trail History</a><a href="#specs">Tech Specs</a></div>
+      <div><h4>The Park</h4><a href="#">The Duck Pond</a><a href="#">The Good Hill</a><a href="#">A Bench</a></div>
+      <div><h4>About Peter</h4><a href="#">His Whole Deal</a><a href="#">Why</a><a href="#">Leave Him Alone</a></div>
+    </div>
+    <div class="copy">Peter Walk™ · A gag built for a guy on a normal walk. He still doesn't know.</div>
+  </footer>
 
 <script>
 (function(){
   const SVGNS="http://www.w3.org/2000/svg";
   const $=id=>document.getElementById(id);
 
-  // ---- park landmarks ----
   const PLACES=[
     {k:"car",   n:"The Parking Lot",  x:50, y:265, e:"🚗", notes:["Back at the car. Sat in it for a while.","Returned to the lot. The walk is over but he is not leaving.","Found the car on the third try."]},
     {k:"hill",  n:"The Good Hill",    x:110,y:185, e:"⛰️", notes:["Walked up the hill. Unclear why.","Conquered the hill. Nobody clapped.","Stood at the top, surveyed his kingdom (a park)."]},
@@ -209,45 +315,31 @@
   ];
   const byKey=Object.fromEntries(PLACES.map(p=>[p.k,p]));
 
-  // ---- tunables ----
-  const MI_PER_PX=0.0007, PACE_SEC=1175;   // ~19:35 /mi — a leisurely amble
-  const BASE_SPEED=42;                      // px/sec at 1x
-  const KEY="peterWalk_v1";
-
-  // ---- state ----
+  const MI_PER_PX=0.0007, PACE_SEC=1175, BASE_SPEED=42, KEY="peterWalk_v1";
   let S=load()||fresh();
 
   function fresh(){
-    const start=Date.now();
-    return {start, trail:[[50,265]], events:[], distPx:0, dwellSec:0, elevFt:0,
+    return {start:Date.now(), trail:[[50,265]], events:[], distPx:0, dwellSec:0, elevFt:0,
             kudos:3, cur:"car", target:nextKey("car"), pos:{x:50,y:265}, visits:{}, ach:""};
   }
   function load(){ try{const r=JSON.parse(localStorage.getItem(KEY)); if(r&&r.trail) return r;}catch(e){} return null; }
   function save(){ try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){} }
+  function nextKey(from){ const o=PLACES.filter(p=>p.k!==from); return o[Math.floor(Math.random()*o.length)].k; }
 
-  function nextKey(from){
-    const opts=PLACES.filter(p=>p.k!==from);
-    return opts[Math.floor(Math.random()*opts.length)].k;
-  }
-
-  // ---- render static scenery + markers ----
   (function scenery(){
     const trees=[[36,52],[372,150],[178,262],[286,278],[120,250],[244,128],[60,180],[388,210],[150,210],[260,30]];
     const g=$("scenery");
     trees.forEach(([x,y])=>{
       const c=document.createElementNS(SVGNS,"circle");
-      c.setAttribute("cx",x);c.setAttribute("cy",y);c.setAttribute("r",10+(x%5));
-      c.setAttribute("fill","#bcd9a6");g.appendChild(c);
+      c.setAttribute("cx",x);c.setAttribute("cy",y);c.setAttribute("r",10+(x%5));c.setAttribute("fill","#bcd9a6");g.appendChild(c);
       const c2=document.createElementNS(SVGNS,"circle");
-      c2.setAttribute("cx",x);c2.setAttribute("cy",y);c2.setAttribute("r",5);
-      c2.setAttribute("fill","#9fca84");g.appendChild(c2);
+      c2.setAttribute("cx",x);c2.setAttribute("cy",y);c2.setAttribute("r",5);c2.setAttribute("fill","#9fca84");g.appendChild(c2);
     });
     const m=$("marks");
     PLACES.forEach(p=>{
       const dot=document.createElementNS(SVGNS,"circle");
       dot.setAttribute("cx",p.x);dot.setAttribute("cy",p.y);dot.setAttribute("r",3.2);
-      dot.setAttribute("fill","#fff");dot.setAttribute("stroke","#9aa0a6");dot.setAttribute("stroke-width",1.4);
-      m.appendChild(dot);
+      dot.setAttribute("fill","#fff");dot.setAttribute("stroke","#7a8aa0");dot.setAttribute("stroke-width",1.4);m.appendChild(dot);
       const t=document.createElementNS(SVGNS,"text");
       t.setAttribute("x",p.x);t.setAttribute("y",p.y-6);t.setAttribute("text-anchor","middle");
       t.setAttribute("font-size","8");t.setAttribute("font-weight","700");t.setAttribute("fill","#5a6068");
@@ -255,7 +347,6 @@
     });
   })();
 
-  // ---- ui refs ----
   const trailEl=$("trail"), meEl=$("me");
   function redrawTrail(){ trailEl.setAttribute("points", S.trail.map(p=>p[0].toFixed(1)+","+p[1].toFixed(1)).join(" ")); }
   function fmtTime(sec){ sec=Math.round(sec); const h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),s=sec%60;
@@ -263,14 +354,12 @@
   function clockAt(sec){ return new Date(S.start+sec*1000).toLocaleTimeString([], {hour:"numeric",minute:"2-digit"}); }
 
   function stats(){
-    const mi=S.distPx*MI_PER_PX;
-    const moving=mi*PACE_SEC;
+    const mi=S.distPx*MI_PER_PX, moving=mi*PACE_SEC;
     $("sDist").innerHTML=mi.toFixed(2)+'<small>mi</small>';
     $("sTime").textContent=fmtTime(moving);
     $("sPace").textContent= mi>0.01 ? fmtTime(PACE_SEC)+"/mi" : "—";
     $("sElev").innerHTML=Math.round(S.elevFt)+'<small>ft</small>';
   }
-
   function renderFeed(){
     const f=$("feed"); f.innerHTML="";
     S.events.slice().reverse().forEach(ev=>{
@@ -278,35 +367,31 @@
       li.innerHTML=`<div class="ic">${ev.e}</div><div class="body">
         <div class="top"><span class="nm">${ev.n}</span><span class="tm">${ev.clock}</span></div>
         <div class="nt">${ev.note}</div>
-        <div class="dm">${ev.mi.toFixed(2)} mi in${ev.visit>1?` · stop #${ev.visit} here`:""}</div>
-      </div>`;
+        <div class="dm">${ev.mi.toFixed(2)} mi in${ev.visit>1?` · stop #${ev.visit} here`:""}</div></div>`;
       f.appendChild(li);
     });
     if(!S.events.length){ f.innerHTML='<li class="ev"><div class="ic">🚶</div><div class="body"><div class="nm">Just getting started…</div><div class="nt">Peter is walking. Lines will appear as he wanders.</div></div></li>'; }
   }
-
   function logEvent(p){
     S.visits[p.k]=(S.visits[p.k]||0)+1;
     const note=p.notes[Math.floor(Math.random()*p.notes.length)];
     const mi=S.distPx*MI_PER_PX, moving=mi*PACE_SEC;
     S.events.push({n:p.n,e:p.e,note,clock:clockAt(moving+S.dwellSec),mi,visit:S.visits[p.k]});
     if(S.events.length>60) S.events=S.events.slice(-60);
-    // achievement
-    if(S.visits[p.k]>=3){ S.ach=`Local Legend — past ${p.n} ${S.visits[p.k]}×`; }
+    if(S.visits[p.k]>=3) S.ach=`Local Legend — past ${p.n} ${S.visits[p.k]}×`;
     renderFeed(); maybeAch();
   }
   function maybeAch(){ if(S.ach){ $("achTxt").textContent=S.ach; $("ach").classList.add("show"); } }
 
-  // ---- animation ----
   let walking=true, resting=false, speedMult=1, restUntil=0, lastTrailPt=S.pos;
   function setStatus(t){ $("status").textContent=t; }
 
   redrawTrail(); stats(); renderFeed(); maybeAch();
   meEl.setAttribute("transform",`translate(${S.pos.x},${S.pos.y})`);
-  $("actDate").textContent = new Date(S.start).toLocaleDateString([], {weekday:"long",month:"short",day:"numeric"})+" · a normal day";
+  $("actDate").textContent = new Date(S.start).toLocaleDateString([], {weekday:"long",month:"short",day:"numeric"})+", a normal day";
   setStatus("Walking toward "+byKey[S.target].n+"…");
 
-  function advance(dt){               // dt in seconds of simulated time
+  function advance(dt){
     const tg=byKey[S.target];
     const dx=tg.x-S.pos.x, dy=tg.y-S.pos.y, d=Math.hypot(dx,dy);
     const move=BASE_SPEED*speedMult*dt;
@@ -331,7 +416,6 @@
     save();
   }
 
-  // timer driver — keeps walking even when the tab is backgrounded (rAF would pause)
   let last=performance.now();
   setInterval(()=>{
     const now=performance.now();
@@ -343,13 +427,10 @@
     }
   },33);
 
-  // verification hook — fast-forward the walk deterministically
   window.__peter={ pump(seconds){ let t=0; const step=0.05;
     while(t<seconds){ if(!resting) advance(step); else { resting=false; S.cur=S.target; S.target=nextKey(S.cur);} t+=step; }
-    return {mi:(S.distPx*MI_PER_PX).toFixed(2), pts:S.trail.length, events:S.events.length}; },
-    state:()=>S };
+    return {mi:(S.distPx*MI_PER_PX).toFixed(2), pts:S.trail.length, events:S.events.length}; }, state:()=>S };
 
-  // ---- controls ----
   $("pause").addEventListener("click",()=>{ walking=!walking;
     $("pause").innerHTML=walking?"⏸ Pause":"▶ Resume";
     $("liveState").textContent=walking?"LIVE":"PAUSED";
@@ -359,18 +440,16 @@
   $("reset").addEventListener("click",()=>{
     if(!confirm("Erase Peter's entire walking history? The lines will be gone forever.")) return;
     localStorage.removeItem(KEY); S=fresh(); lastTrailPt=S.pos; S.ach="";
-    $("ach").classList.remove("show");
-    redrawTrail(); stats(); renderFeed();
+    $("ach").classList.remove("show"); redrawTrail(); stats(); renderFeed();
     meEl.setAttribute("transform",`translate(${S.pos.x},${S.pos.y})`);
     setStatus("Fresh start. Walking toward "+byKey[S.target].n+"…"); save(); });
-  $("follow").addEventListener("click",()=>{ const b=$("follow"); b.classList.toggle("on");
-    b.textContent=b.classList.contains("on")?"Following":"Follow"; });
+  $("follow").addEventListener("click",()=>{ const b=$("follow");
+    b.classList.toggle("done"); b.textContent=b.classList.contains("done")?"Pre-ordered ✓":"Buy"; });
   $("kudos").addEventListener("click",()=>{ S.kudos++; $("kCount").textContent=S.kudos; save(); });
   $("kCount").textContent=S.kudos;
 
-  // periodic save so the trail survives a tab close mid-walk
-  setInterval(save, 4000);
-  window.addEventListener("beforeunload", save);
+  setInterval(save,4000);
+  window.addEventListener("beforeunload",save);
 })();
 </script>
 </body>
