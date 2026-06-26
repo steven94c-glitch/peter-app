@@ -152,14 +152,18 @@
       <div class="mapview">
         <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
           <rect width="400" height="300" fill="#e6e9ec"/>
-          <ellipse cx="320" cy="120" rx="34" ry="22" fill="#cfe3c2"/>
-          <ellipse cx="150" cy="250" rx="40" ry="24" fill="#cfe3c2"/>
+          <!-- cherry orchards / vineyards -->
+          <ellipse cx="120" cy="262" rx="46" ry="20" fill="#cfe3c2"/>
+          <ellipse cx="285" cy="264" rx="40" ry="17" fill="#cfe3c2"/>
+          <ellipse cx="372" cy="150" rx="24" ry="34" fill="#cfe3c2"/>
           <g id="roads"></g>
-          <path d="M170,-6 C195,55 145,105 188,158 C228,206 320,196 360,258 C372,283 388,300 402,312" fill="none" stroke="#aadcf2" stroke-width="24" stroke-linecap="round"/>
-          <path d="M170,-6 C195,55 145,105 188,158 C228,206 320,196 360,258 C372,283 388,300 402,312" fill="none" stroke="#bfe6f6" stroke-width="13" stroke-linecap="round"/>
+          <!-- Grand Traverse Bay (shoreline along the top) -->
+          <path d="M-5,-5 H405 V62 C362,54 330,80 300,64 C262,44 232,76 196,58 C150,38 96,78 44,60 C22,53 4,58 -5,64 Z" fill="#aadcf2"/>
+          <!-- Old Mission Peninsula -->
+          <path d="M300,64 C302,40 314,26 326,28 C340,31 346,52 343,66 Z" fill="#e6e9ec"/>
           <polyline id="trail" fill="none" stroke="#0071e3" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.92" points=""/>
           <g id="marks"></g>
-          <g id="me" transform="translate(80,150)">
+          <g id="me" transform="translate(80,210)">
             <circle r="6" fill="#0071e3" opacity="0.35">
               <animate attributeName="r" values="6;17" dur="1.6s" repeatCount="indefinite"/>
               <animate attributeName="opacity" values="0.5;0" dur="1.6s" repeatCount="indefinite"/>
@@ -205,14 +209,14 @@
     <section class="screen" id="screen-specs">
       <div class="scroll">
         <div class="lgtitle">Tech Specs<span> · without his knowledge</span></div>
-        <div class="specrow"><span class="l">Coverage</span><span class="r">Everywhere. Literally everywhere.</span></div>
-        <div class="specrow"><span class="l">Chip</span><span class="r">A17 Pro (it's just his phone)</span></div>
-        <div class="specrow"><span class="l">Connectivity</span><span class="r">Left on read</span></div>
-        <div class="specrow"><span class="l">Water Resistance</span><span class="r">Cried once, in 2019</span></div>
+        <div class="specrow"><span class="l">Coverage</span><span class="r">All of Greater Traverse City</span></div>
+        <div class="specrow"><span class="l">Drivetrain</span><span class="r">Shimano, allegedly serviced</span></div>
+        <div class="specrow"><span class="l">Connectivity</span><span class="r">Leaves his wife on read</span></div>
+        <div class="specrow"><span class="l">Water Resistance</span><span class="r">Rides in the rain, complains after</span></div>
         <div class="specrow"><span class="l">Operating System</span><span class="r">Vibes 18</span></div>
-        <div class="specrow"><span class="l">Battery</span><span class="r">All-day. Will not go home.</span></div>
-        <div class="specrow"><span class="l">Off Switch</span><span class="r">None found</span></div>
-        <div class="specrow"><span class="l">In the Box</span><span class="r">A pretzel, $6, regret</span></div>
+        <div class="specrow"><span class="l">Battery</span><span class="r">All-day. Skips dinner.</span></div>
+        <div class="specrow"><span class="l">Off Switch</span><span class="r">His wife is still looking for it</span></div>
+        <div class="specrow"><span class="l">In the Box</span><span class="r">A spare tube, a multitool, cherry pie</span></div>
       </div>
     </section>
 
@@ -222,7 +226,7 @@
         <div class="prof">
           <div class="ava">P</div>
           <div class="nm">Peter</div>
-          <div class="sub">Live · Philadelphia · does not know</div>
+          <div class="sub">Traverse City, MI · married · owns The Wild Card 🚲</div>
         </div>
         <div class="tagcard">
           <h2>He is the app.<br/><span class="grad">The app is him.</span></h2>
@@ -232,9 +236,9 @@
         <div class="reax">
           <span class="kudos" id="kudos">👍 <b id="kCount">3</b> Likes</span>
           <span>💬 <b>1</b></span>
-          <span class="cmt" id="comment">"It just works." — nobody</span>
+          <span class="cmt" id="comment">"where are you?" — his wife</span>
         </div>
-        <div class="blurb"><b>Goes everywhere. Accomplishes nothing.</b><br/>Wawa, the gym parking lot, his ex's block, Atlantic City — PeterApp follows him to all of them, forever.</div>
+        <div class="blurb"><b>Goes everywhere. Accomplishes nothing.</b><br/>The shop, the brewery, the TART trail, Sleeping Bear Dunes — PeterApp follows him to all of them, forever.</div>
         <button class="resetbtn" id="reset">Erase everywhere he's been</button>
         <div class="fine">From $0/mo. for 36 mo.* · Peter is not for sale. He has not consented to being tracked and remains unaware that this app exists. A parody, not affiliated with Apple Inc. or Peter.</div>
       </div>
@@ -257,28 +261,28 @@
   const $=id=>document.getElementById(id);
 
   const PLACES=[
-    {k:"couch", n:"The Couch",            x:80, y:150, e:"🛋️", notes:["Has not moved in six hours.","Back on the couch. The couch missed him.","Lying down. Calling it 'recharging.'"]},
-    {k:"wawa",  n:"Wawa",                 x:150,y:88,  e:"🥪", notes:["Got a Shorti. A classic.","Nine minutes at the touchscreen.","Came for a coffee, left with $40 of snacks."]},
-    {k:"gym",   n:"The Gym (parking lot)",x:58, y:232, e:"🏋️", notes:["Sat in the gym lot. Did not go in.","Drove to the gym. Considered it. Drove home.","Gym parking lot. 0 reps logged."]},
-    {k:"work",  n:"Work (allegedly)",     x:218,y:58,  e:"💼", notes:["At work, allegedly.","'Working from the car' again.","Clocked in. Spiritually clocked out."]},
-    {k:"ex",    n:"His Ex's Block",       x:300,y:80,  e:"💔", notes:["'Just driving through' his ex's block.","Slowed down, kept going, came back around.","Was definitely not here on purpose."]},
-    {k:"mom",   n:"Mom's House",          x:128,y:212, e:"🏠", notes:["At mom's. 'Helping with stuff.'","Left with three containers of leftovers.","Doing laundry here. He is 34."]},
-    {k:"bar",   n:"The Bar",              x:250,y:178, e:"🍺", notes:["At the bar. 'Just one.'","Closed his tab. Then reopened it.","Knows the bartender's whole life now."]},
-    {k:"ac",    n:"Atlantic City",        x:362,y:262, e:"🎰", notes:["Up $40, refuses to leave.","Drove 60 miles to lose $35.","'Last hand.' (It is never the last hand.)"]},
-    {k:"dog",   n:"The Dog Park",         x:192,y:138, e:"🐕", notes:["At the dog park. Owns no dog.","Watched other people's dogs. Suspiciously long.","Nodded at a stranger's labrador."]},
-    {k:"term",  n:"Reading Terminal",     x:208,y:112, e:"🥨", notes:["On his third free sample.","Grazed the whole market. Bought nothing.","Lunch was 'sampling.'"]},
-    {k:"bridge",n:"Walt Whitman Bridge",  x:332,y:202, e:"🚗", notes:["Stuck in bridge traffic. Thriving.","Stopped dead on the bridge. Existential.","Going nowhere. Literally, on a bridge."]},
-    {k:"cvs",   n:"CVS, 2am",             x:92, y:90,  e:"🏪", notes:["Here at 2am for a single banana.","Got a 3-foot receipt and one item.","Unwell, but hydrated."]},
+    {k:"home",   n:"Home",                 x:80, y:210, e:"🏡", notes:["Wife asked him to do one thing. He's 'about to.'","Wheeled a fourth bike into the living room.","Home, hiding from a chore in plain sight."]},
+    {k:"shop",   n:"The Wild Card",        x:150,y:150, e:"🚲", notes:["At the shop. 'Just truing a wheel.' (Three hours.)","Sold a $4,000 bike, then talked the guy's ear off for free.","Opened the shop, immediately started a group ride instead."]},
+    {k:"garage", n:"The Garage",           x:58, y:140, e:"🔧", notes:["Seven bikes, zero excuses.","'Quick tune-up.' It is never quick.","Wife knocked. He pretended not to hear."]},
+    {k:"tart",   n:"The TART Trail",       x:252,y:168, e:"🚴", notes:["'Testing a customer's bike.' (30 miles.)","Said 'short ride.' The sun is now setting.","Texted the wife a sunset pic as an alibi."]},
+    {k:"bay",    n:"Clinch Park Beach",    x:175,y:62,  e:"🏖️", notes:["Skipped one rock on the bay, called it a day.","Dipped a toe in Grand Traverse Bay. Too cold. Left.","Beach with the wife. Lasted twelve minutes."]},
+    {k:"brew",   n:"The Brewery",          x:300,y:122, e:"🍺", notes:["Told the wife he's 'still at the shop.'","One pint with the group-ride crew. Then three.","Solved the shop's problems out loud to no one."]},
+    {k:"winery", n:"Old Mission Wineries", x:326,y:74,  e:"🍷", notes:["Wine tasting. Wife's idea. He brought a bike anyway.","Nodding like he can taste the 'oak.'","Bought a bottle to seem cultured."]},
+    {k:"moomers",n:"Moomers",              x:108,y:94,  e:"🍦", notes:["Cherry, obviously. It's basically the law up here.","Line wrapped around the building. Worth it.","Double scoop. Wife got 'a bite' (half)."]},
+    {k:"inlaws", n:"The In-Laws'",         x:305,y:216, e:"👀", notes:["Escaped to fix their bikes within four minutes.","'So how's the shop?' ×40.","Found their garage. Has not been seen since."]},
+    {k:"meijer", n:"Meijer",               x:165,y:240, e:"🛒", notes:["Sent for milk. Came back with a bike rack.","Texted 'what kind again?' from aisle 3.","Forgot the one thing. Remembered cherry pop."]},
+    {k:"front",  n:"Front Street",         x:225,y:108, e:"🏬", notes:["Waved at six people. Knows them all.","Everyone asks about the shop. He loves it.","Parked the bike out front like a sheriff."]},
+    {k:"dunes",  n:"Sleeping Bear Dunes",  x:50, y:262, e:"⛰️", notes:["Climbed the dune. Regretted it immediately.","Stood at the top. 'Yep.'","Big day trip. Forgot the water bottles."]},
   ];
   const byKey=Object.fromEntries(PLACES.map(p=>[p.k,p]));
 
-  const MI_PER_PX=0.0009, PACE_SEC=1100, BASE_SPEED=46, KEY="peterPlus_v2";
+  const MI_PER_PX=0.0009, PACE_SEC=1100, BASE_SPEED=46, KEY="peterTC_v3";
   let S=load()||fresh();
   if(!byKey[S.cur]||!byKey[S.target]){ S=fresh(); }
 
   function fresh(){
-    return {start:Date.now(), trail:[[80,150]], events:[], distPx:0, dwellSec:0, elevFt:0,
-            kudos:3, cur:"couch", target:nextKey("couch"), pos:{x:80,y:150}, visits:{}, ach:""};
+    return {start:Date.now(), trail:[[80,210]], events:[], distPx:0, dwellSec:0, elevFt:0,
+            kudos:3, cur:"home", target:nextKey("home"), pos:{x:80,y:210}, visits:{}, ach:""};
   }
   function load(){ try{const r=JSON.parse(localStorage.getItem(KEY)); if(r&&r.trail) return r;}catch(e){} return null; }
   function save(){ try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){} }
