@@ -3,226 +3,375 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Peter Tracker™ — Live</title>
-<meta name="description" content="The world's most advanced* real-time Peter location intelligence system." />
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📍</text></svg>" />
+<title>Peter — Afternoon Walk</title>
+<meta name="description" content="Strava, but for a guy on a totally normal walk in the park." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚶</text></svg>" />
 <style>
   :root{
-    --bg:#070b14; --panel:#0e1726; --panel2:#13203a;
-    --line:#1d2c4a; --grid:rgba(74,222,128,.08);
-    --green:#4ade80; --green-dim:#2b7a4d; --amber:#fbbf24;
-    --red:#f87171; --text:#e6edf6; --muted:#8aa0bd; --accent:#38bdf8;
+    --orange:#fc4c02; --orange-d:#e5430a; --ink:#1c1c22; --muted:#6b6b78;
+    --line:#e9e9ee; --card:#ffffff; --bg:#f4f5f7; --soft:#f8f8fa;
     --mono:'SF Mono',ui-monospace,Menlo,Consolas,monospace;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
   body{
-    background:radial-gradient(1200px 800px at 70% -10%, #11203a 0%, var(--bg) 55%);
-    color:var(--text);
-    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-    min-height:100%;
-    display:flex;align-items:center;justify-content:center;
-    padding:24px;
+    background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    display:flex;justify-content:center;padding:20px 16px 40px;
   }
   .app{width:100%;max-width:480px}
-  .topbar{
-    display:flex;align-items:center;justify-content:space-between;
-    margin-bottom:14px;
-  }
-  .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.3px}
-  .brand .dot{
-    width:11px;height:11px;border-radius:50%;background:var(--green);
-    box-shadow:0 0 0 0 rgba(74,222,128,.7);animation:pulse 1.8s infinite;
-  }
-  .brand small{font-weight:600;color:var(--green);font-family:var(--mono);font-size:11px}
-  .live{
-    font-family:var(--mono);font-size:11px;color:var(--green);
-    border:1px solid var(--green-dim);border-radius:999px;padding:4px 10px;
-    display:flex;align-items:center;gap:6px;background:rgba(74,222,128,.06)
-  }
-  .live::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--green);animation:blink 1.2s infinite}
 
-  .card{
-    background:linear-gradient(180deg,var(--panel) 0%, #0b1422 100%);
-    border:1px solid var(--line);border-radius:18px;overflow:hidden;
-    box-shadow:0 24px 60px -20px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.03);
-  }
+  /* header */
+  .head{display:flex;align-items:center;gap:11px;margin-bottom:14px}
+  .ava{width:46px;height:46px;border-radius:50%;flex:none;
+    background:linear-gradient(135deg,#ff7a3d,var(--orange));
+    display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:20px;
+    box-shadow:0 4px 12px -4px rgba(252,76,2,.5)}
+  .who .n{font-weight:800;font-size:15px;line-height:1.2}
+  .who .s{font-size:12.5px;color:var(--muted);margin-top:1px}
+  .follow{margin-left:auto;border:1.5px solid var(--orange);color:var(--orange);
+    background:#fff;font-weight:800;font-size:12px;border-radius:999px;padding:7px 14px;cursor:pointer}
+  .follow.on{background:var(--orange);color:#fff}
 
-  /* MAP */
-  .map{position:relative;height:230px;background:var(--panel2);overflow:hidden}
-  .map .grid{position:absolute;inset:0;
-    background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
-    background-size:28px 28px;
-  }
-  .map .roads{position:absolute;inset:0;opacity:.5}
-  .scan{position:absolute;inset:0;background:linear-gradient(180deg,transparent 0%, rgba(56,189,248,.07) 50%, transparent 100%);
-    height:60px;animation:scan 3.4s linear infinite}
-  .blip{
-    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-    transition:left .9s cubic-bezier(.5,1.4,.4,1), top .9s cubic-bezier(.5,1.4,.4,1);
-  }
-  .blip .ring{position:absolute;left:50%;top:50%;width:14px;height:14px;border-radius:50%;
-    transform:translate(-50%,-50%);background:var(--green);
-    box-shadow:0 0 14px 3px rgba(74,222,128,.8)}
-  .blip .wave{position:absolute;left:50%;top:50%;width:14px;height:14px;border-radius:50%;
-    transform:translate(-50%,-50%);border:2px solid var(--green);animation:wave 1.8s ease-out infinite}
-  .blip.lost .ring{background:var(--amber);box-shadow:0 0 14px 3px rgba(251,191,36,.8)}
-  .blip.lost .wave{border-color:var(--amber)}
-  .blip .tag{position:absolute;left:20px;top:-8px;white-space:nowrap;font-family:var(--mono);
-    font-size:11px;background:rgba(7,11,20,.85);border:1px solid var(--line);
-    padding:3px 7px;border-radius:6px;color:var(--green)}
-  .coords{position:absolute;left:12px;bottom:10px;font-family:var(--mono);font-size:10px;color:var(--muted);
-    background:rgba(7,11,20,.6);padding:3px 8px;border-radius:6px}
-  .acc{position:absolute;right:12px;bottom:10px;font-family:var(--mono);font-size:10px;color:var(--muted);
-    background:rgba(7,11,20,.6);padding:3px 8px;border-radius:6px}
-  .searching{position:absolute;inset:0;display:none;align-items:center;justify-content:center;
-    background:rgba(7,11,20,.55);backdrop-filter:blur(2px);font-family:var(--mono);
-    color:var(--accent);font-size:13px;letter-spacing:1px}
-  .map.busy .searching{display:flex}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;
+    box-shadow:0 1px 2px rgba(20,20,40,.04),0 12px 30px -22px rgba(20,20,40,.4);overflow:hidden}
+  .title{padding:14px 16px 10px}
+  .title h1{font-size:19px;font-weight:800;letter-spacing:-.2px}
+  .title .meta{font-size:12.5px;color:var(--muted);margin-top:3px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .pill{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10.5px;
+    font-weight:600;padding:3px 8px;border-radius:999px;background:#eef6ee;color:#2e7d32}
+  .pill .d{width:6px;height:6px;border-radius:50%;background:#2e7d32;animation:blink 1.3s infinite}
 
-  /* READOUT */
-  .readout{padding:18px}
-  .loc{font-size:22px;font-weight:800;line-height:1.2;margin-bottom:2px}
-  .activity{color:var(--muted);font-size:14px;margin-bottom:14px}
-  .activity b{color:var(--accent);font-weight:700}
-  .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .stat{background:rgba(255,255,255,.02);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
-  .stat .k{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted)}
-  .stat .v{font-size:15px;font-weight:700;margin-top:3px}
-  .v.green{color:var(--green)} .v.amber{color:var(--amber)} .v.red{color:var(--red)}
+  /* map */
+  .mapwrap{position:relative;background:#e9f1e3;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  svg.map{display:block;width:100%;height:auto}
+  .status{position:absolute;left:10px;top:10px;background:rgba(28,28,34,.82);color:#fff;
+    font-family:var(--mono);font-size:11px;padding:5px 10px;border-radius:8px;backdrop-filter:blur(3px);
+    max-width:84%}
+  .ach{position:absolute;right:10px;bottom:10px;background:rgba(255,255,255,.94);
+    border:1px solid var(--line);font-size:11px;font-weight:700;color:#8a5a00;
+    padding:5px 9px;border-radius:8px;display:none;align-items:center;gap:5px}
+  .ach.show{display:flex}
 
-  .btn{
-    width:100%;margin-top:16px;border:0;border-radius:14px;cursor:pointer;
-    padding:16px;font-size:16px;font-weight:800;letter-spacing:.4px;color:#04210f;
-    background:linear-gradient(180deg,#5ef08e,#34c46d);
-    box-shadow:0 10px 24px -8px rgba(74,222,128,.6), inset 0 1px 0 rgba(255,255,255,.4);
-    transition:transform .08s ease, filter .2s ease;
-  }
-  .btn:hover{filter:brightness(1.05)}
-  .btn:active{transform:translateY(1px) scale(.995)}
-  .btn:disabled{filter:grayscale(.4) brightness(.8);cursor:wait}
-  .foot{margin-top:12px;text-align:center;font-family:var(--mono);font-size:10.5px;color:var(--muted);line-height:1.6}
-  .foot a{color:var(--muted)}
+  /* stats */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr)}
+  .stats .st{padding:12px 10px;text-align:center;border-right:1px solid var(--line)}
+  .stats .st:last-child{border-right:0}
+  .st .v{font-size:18px;font-weight:800;letter-spacing:-.3px;font-variant-numeric:tabular-nums}
+  .st .v small{font-size:11px;font-weight:700;color:var(--muted);margin-left:1px}
+  .st .k{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-top:2px}
 
-  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(74,222,128,.6)}70%{box-shadow:0 0 0 9px rgba(74,222,128,0)}100%{box-shadow:0 0 0 0 rgba(74,222,128,0)}}
-  @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
-  @keyframes wave{0%{width:14px;height:14px;opacity:.9}100%{width:70px;height:70px;opacity:0}}
-  @keyframes scan{0%{transform:translateY(-70px)}100%{transform:translateY(300px)}}
+  .social{display:flex;align-items:center;gap:16px;padding:10px 16px;border-top:1px solid var(--line);
+    font-size:13px;color:var(--muted)}
+  .social b{color:var(--ink)}
+  .social .kudos{cursor:pointer;user-select:none}
+
+  /* controls */
+  .ctrl{display:flex;gap:8px;margin:14px 0 10px}
+  .ctrl button{flex:1;border:1px solid var(--line);background:#fff;border-radius:11px;
+    padding:11px;font-weight:800;font-size:13px;cursor:pointer;color:var(--ink);transition:.12s}
+  .ctrl button:hover{background:var(--soft)}
+  .ctrl button.primary{background:var(--orange);border-color:var(--orange);color:#fff}
+  .ctrl button.primary:hover{background:var(--orange-d)}
+
+  /* feed */
+  .feedhdr{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);
+    margin:18px 4px 8px;display:flex;align-items:center;gap:8px}
+  .feedhdr::after{content:'';flex:1;height:1px;background:var(--line)}
+  .feed{list-style:none}
+  .ev{display:flex;gap:11px;padding:11px 12px;background:#fff;border:1px solid var(--line);
+    border-radius:12px;margin-bottom:8px;align-items:flex-start;animation:rise .35s ease}
+  .ev .ic{width:34px;height:34px;border-radius:9px;background:var(--soft);display:flex;
+    align-items:center;justify-content:center;font-size:18px;flex:none}
+  .ev .body{flex:1;min-width:0}
+  .ev .top{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+  .ev .nm{font-weight:800;font-size:14px}
+  .ev .tm{font-family:var(--mono);font-size:11px;color:var(--muted);flex:none}
+  .ev .nt{font-size:13px;color:var(--muted);margin-top:2px;line-height:1.4}
+  .ev .dm{font-family:var(--mono);font-size:11px;color:var(--orange);font-weight:700;margin-top:4px}
+
+  .foot{text-align:center;font-family:var(--mono);font-size:10.5px;color:#9a9aa6;margin-top:18px;line-height:1.7}
+
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+  @keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 </style>
 </head>
 <body>
-  <div class="app">
-    <div class="topbar">
-      <div class="brand"><span class="dot"></span>Peter Tracker<small>™</small></div>
-      <div class="live">LIVE</div>
+<div class="app">
+
+  <div class="head">
+    <div class="ava">P</div>
+    <div class="who">
+      <div class="n">Peter</div>
+      <div class="s">Fairmount Park · Philadelphia</div>
     </div>
+    <button class="follow" id="follow">Follow</button>
+  </div>
 
-    <div class="card">
-      <div class="map" id="map">
-        <div class="grid"></div>
-        <svg class="roads" viewBox="0 0 480 230" preserveAspectRatio="none">
-          <path d="M0 60 H480 M0 150 H480 M120 0 V230 M300 0 V230" stroke="#2a3d63" stroke-width="2" fill="none"/>
-          <path d="M0 110 C140 60 320 190 480 130" stroke="#22344f" stroke-width="6" fill="none"/>
-        </svg>
-        <div class="scan"></div>
-        <div class="blip" id="blip">
-          <div class="wave"></div><div class="ring"></div>
-          <div class="tag" id="tag">PETER</div>
-        </div>
-        <div class="coords" id="coords">39.9526° N, 75.1652° W</div>
-        <div class="acc" id="acc">±4m</div>
-        <div class="searching">TRIANGULATING&nbsp;PETER…</div>
-      </div>
-
-      <div class="readout">
-        <div class="loc" id="loc">Wawa, South Philly</div>
-        <div class="activity" id="activity">Currently <b>getting a hoagie</b></div>
-
-        <div class="stats">
-          <div class="stat"><div class="k">Last seen</div><div class="v" id="seen">just now</div></div>
-          <div class="stat"><div class="k">Confidence</div><div class="v green" id="conf">94%</div></div>
-          <div class="stat"><div class="k">Status</div><div class="v amber" id="status">Vibing</div></div>
-          <div class="stat"><div class="k">Speed</div><div class="v" id="speed">0.0 mph</div></div>
-        </div>
-
-        <button class="btn" id="btn">📍 LOCATE PETER</button>
+  <div class="card">
+    <div class="title">
+      <h1 id="actTitle">Afternoon Walk</h1>
+      <div class="meta">
+        <span id="actDate">Today · a normal day</span>
+        <span class="pill"><span class="d"></span><span id="liveState">LIVE</span></span>
       </div>
     </div>
 
-    <div class="foot">
-      Peter Tracker™ v2.6 · Accuracy not guaranteed · Peter has not consented to this<br/>
-      Powered by 4 satellites and a guy who saw him earlier
+    <div class="mapwrap">
+      <svg class="map" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+        <rect width="400" height="300" fill="#e7f0df"/>
+        <!-- trees / shrubs -->
+        <g id="scenery"></g>
+        <!-- pond -->
+        <ellipse cx="300" cy="120" rx="40" ry="25" fill="#bfe0f0" stroke="#a3cee0" stroke-width="2"/>
+        <ellipse cx="293" cy="116" rx="4" ry="2.6" fill="#7a8b6a"/>
+        <ellipse cx="308" cy="126" rx="4" ry="2.6" fill="#7a8b6a"/>
+        <!-- park paths (decorative) -->
+        <g fill="none" stroke="#dfd7c6" stroke-width="9" stroke-linecap="round">
+          <path d="M50,265 C70,215 92,205 110,185 C132,150 140,105 150,70 C190,52 212,54 230,55 C285,56 330,58 350,60"/>
+          <path d="M110,185 C150,175 180,168 200,165 C250,160 285,150 300,120"/>
+          <path d="M200,165 C250,175 300,200 320,215 C340,228 348,245 350,255"/>
+          <path d="M300,120 C330,95 345,78 350,60"/>
+          <path d="M150,70 C120,82 95,95 70,110"/>
+        </g>
+        <g fill="none" stroke="#f3eee2" stroke-width="5" stroke-linecap="round">
+          <path d="M50,265 C70,215 92,205 110,185 C132,150 140,105 150,70 C190,52 212,54 230,55 C285,56 330,58 350,60"/>
+          <path d="M110,185 C150,175 180,168 200,165 C250,160 285,150 300,120"/>
+          <path d="M200,165 C250,175 300,200 320,215 C340,228 348,245 350,255"/>
+          <path d="M300,120 C330,95 345,78 350,60"/>
+          <path d="M150,70 C120,82 95,95 70,110"/>
+        </g>
+        <!-- Peter's GPS trail -->
+        <polyline id="trail" fill="none" stroke="#fc4c02" stroke-width="3.4"
+          stroke-linejoin="round" stroke-linecap="round" opacity="0.9" points=""/>
+        <!-- landmark markers -->
+        <g id="marks"></g>
+        <!-- current position -->
+        <g id="me" transform="translate(50,265)">
+          <circle r="6" fill="#fc4c02" opacity="0.35">
+            <animate attributeName="r" values="6;17" dur="1.6s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0.5;0" dur="1.6s" repeatCount="indefinite"/>
+          </circle>
+          <circle r="6" fill="#fc4c02" stroke="#fff" stroke-width="2.5"/>
+        </g>
+      </svg>
+      <div class="status" id="status">Lacing up…</div>
+      <div class="ach" id="ach"><span>🏆</span><span id="achTxt"></span></div>
+    </div>
+
+    <div class="stats">
+      <div class="st"><div class="v" id="sDist">0.00<small>mi</small></div><div class="k">Distance</div></div>
+      <div class="st"><div class="v" id="sTime">0:00</div><div class="k">Moving</div></div>
+      <div class="st"><div class="v" id="sPace">—</div><div class="k">Pace</div></div>
+      <div class="st"><div class="v" id="sElev">0<small>ft</small></div><div class="k">Elev Gain</div></div>
+    </div>
+
+    <div class="social">
+      <span class="kudos" id="kudos">👍 <b id="kCount">3</b> kudos</span>
+      <span>💬 <b>1</b></span>
+      <span style="margin-left:auto;font-style:italic" id="comment">"why" — your mom</span>
     </div>
   </div>
 
+  <div class="ctrl">
+    <button class="primary" id="pause">⏸ Pause</button>
+    <button id="speed">⏩ 1×</button>
+    <button id="reset">↺ Reset</button>
+  </div>
+
+  <div class="feedhdr">History — everywhere he's been</div>
+  <ul class="feed" id="feed"></ul>
+
+  <div class="foot">
+    Peter Walk™ · He does not know he is being tracked<br/>
+    Trail saved to this device — the lines stay even after you close the tab
+  </div>
+</div>
+
 <script>
-  const LOCATIONS = [
-    {loc:"Wawa, South Philly", act:"getting a <b>hoagie</b>", status:"Vibing", coords:"39.9201° N, 75.1577° W"},
-    {loc:"Behind the Wendy's", act:"doing something <b>unspecified</b>", status:"Suspicious", coords:"39.9612° N, 75.1399° W"},
-    {loc:"His ex's neighborhood", act:"<b>\"just driving through\"</b>", status:"Concerning", coords:"40.0094° N, 75.1333° W"},
-    {loc:"The gym parking lot", act:"sitting in the car <b>not going in</b>", status:"Procrastinating", coords:"39.9789° N, 75.2003° W"},
-    {loc:"Atlantic City", act:"<b>up $40</b> and refusing to leave", status:"On a heater", coords:"39.3643° N, 74.4229° W"},
-    {loc:"A Spirit Halloween (in June)", act:"asking when they <b>open back up</b>", status:"Confused", coords:"39.9011° N, 75.1722° W"},
-    {loc:"Your mom's house", act:"\"<b>helping with stuff</b>\"", status:"Don't ask", coords:"39.9442° N, 75.1601° W"},
-    {loc:"The middle of the Walt Whitman Bridge", act:"<b>stopped in traffic</b>, thriving", status:"Trapped", coords:"39.9043° N, 75.1280° W"},
-    {loc:"Reading Terminal Market", act:"on his <b>third free sample</b>", status:"Freeloading", coords:"39.9533° N, 75.1590° W"},
-    {loc:"A group chat he muted", act:"<b>typing… then stopping</b>", status:"Ghosting", coords:"00.0000° N, 00.0000° W"},
-    {loc:"The dollar store", act:"buying <b>17 things</b> for $40 somehow", status:"Confused", coords:"39.9388° N, 75.1199° W"},
-    {loc:"Some girl's Instagram story", act:"<b>watching it for the 4th time</b>", status:"Concerning", coords:"40.0011° N, 75.1290° W"},
-    {loc:"Pat's vs Geno's standoff", act:"<b>can't decide</b>, holding up the line", status:"Paralyzed", coords:"39.9335° N, 75.1591° W"},
-    {loc:"On his way (allegedly)", act:"says he's <b>\"5 minutes out\"</b> (he is not)", status:"Lying", coords:"39.9700° N, 75.1100° W"},
-    {loc:"The Linc parking lot", act:"<b>tailgating</b> a game that isn't today", status:"Committed", coords:"39.9008° N, 75.1675° W"},
-    {loc:"A CVS at 2am", act:"buying <b>a single banana</b>", status:"Unwell", coords:"39.9550° N, 75.1620° W"},
-    {loc:"LOCATION REDACTED", act:"<b>[signal lost]</b> — probably fine", status:"Off grid", coords:"??.???? N, ??.???? W"},
-    {loc:"The couch", act:"hasn't moved in <b>6 hours</b>", status:"Hibernating", coords:"39.9526° N, 75.1652° W"},
+(function(){
+  const SVGNS="http://www.w3.org/2000/svg";
+  const $=id=>document.getElementById(id);
+
+  // ---- park landmarks ----
+  const PLACES=[
+    {k:"car",   n:"The Parking Lot",  x:50, y:265, e:"🚗", notes:["Back at the car. Sat in it for a while.","Returned to the lot. The walk is over but he is not leaving.","Found the car on the third try."]},
+    {k:"hill",  n:"The Good Hill",    x:110,y:185, e:"⛰️", notes:["Walked up the hill. Unclear why.","Conquered the hill. Nobody clapped.","Stood at the top, surveyed his kingdom (a park)."]},
+    {k:"tree",  n:"The Big Tree",     x:150,y:70,  e:"🌳", notes:["Stood under the big tree for a bit.","Considered the tree. It was, in fact, a good tree.","Leaned on the tree like he owns it."]},
+    {k:"statue",n:"That One Statue",  x:230,y:55,  e:"🗿", notes:["Read the plaque. Forgot it instantly.","Nodded respectfully at a statue of a man he can't name.","Took zero photos of the statue."]},
+    {k:"rest",  n:"The Restrooms",    x:350,y:60,  e:"🚻", notes:["Used the restroom. We will not elaborate.","Bathroom break. 4/10, no soap.","A pit stop. Hand dryer was broken."]},
+    {k:"pond",  n:"The Duck Pond",    x:300,y:120, e:"🦆", notes:["Watched the ducks. Did not feed them (illegal, apparently).","A duck made direct eye contact. Peter looked away first.","Stared at the pond and thought about nothing."]},
+    {k:"bench", n:"A Bench",          x:200,y:165, e:"🪑", notes:["Sat on a bench. Checked phone. 0 notifications.","Bench break. Watched a jogger and felt bad.","Sat down for 'just a sec' (six minutes)."]},
+    {k:"fount", n:"Water Fountain",   x:320,y:215, e:"⛲", notes:["Drank from the fountain. Lukewarm.","Refilled the bottle. Tasted like the fountain.","Pressed the button. Mostly mist."]},
+    {k:"dog",   n:"The Dog Park",     x:350,y:255, e:"🐕", notes:["Watched other people's dogs. Owns no dog.","Lingered at the dog park. Suspiciously long.","Gave a stranger's labrador a knowing nod."]},
+    {k:"snack", n:"The Snack Stand",  x:70, y:110, e:"🥨", notes:["Bought a pretzel. $6. Outrageous. Worth it.","Snack stand: got a water and immediate regret.","Considered ice cream. Got a napkin instead."]},
   ];
+  const byKey=Object.fromEntries(PLACES.map(p=>[p.k,p]));
 
-  const $ = id => document.getElementById(id);
-  const rand = arr => arr[Math.floor(Math.random()*arr.length)];
+  // ---- tunables ----
+  const MI_PER_PX=0.0007, PACE_SEC=1175;   // ~19:35 /mi — a leisurely amble
+  const BASE_SPEED=42;                      // px/sec at 1x
+  const KEY="peterWalk_v1";
 
-  function setStatusColor(el, status){
-    el.className = "v amber";
-    if(/heater|vibing|committed/i.test(status)) el.className = "v green";
-    if(/concerning|suspicious|unwell|lying|off grid|don't ask/i.test(status)) el.className = "v red";
+  // ---- state ----
+  let S=load()||fresh();
+
+  function fresh(){
+    const start=Date.now();
+    return {start, trail:[[50,265]], events:[], distPx:0, dwellSec:0, elevFt:0,
+            kudos:3, cur:"car", target:nextKey("car"), pos:{x:50,y:265}, visits:{}, ach:""};
+  }
+  function load(){ try{const r=JSON.parse(localStorage.getItem(KEY)); if(r&&r.trail) return r;}catch(e){} return null; }
+  function save(){ try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){} }
+
+  function nextKey(from){
+    const opts=PLACES.filter(p=>p.k!==from);
+    return opts[Math.floor(Math.random()*opts.length)].k;
   }
 
-  function update(){
-    const d = rand(LOCATIONS);
-    const lost = /redacted|signal|off grid|ghosting/i.test(d.status + d.act + d.loc);
+  // ---- render static scenery + markers ----
+  (function scenery(){
+    const trees=[[36,52],[372,150],[178,262],[286,278],[120,250],[244,128],[60,180],[388,210],[150,210],[260,30]];
+    const g=$("scenery");
+    trees.forEach(([x,y])=>{
+      const c=document.createElementNS(SVGNS,"circle");
+      c.setAttribute("cx",x);c.setAttribute("cy",y);c.setAttribute("r",10+(x%5));
+      c.setAttribute("fill","#bcd9a6");g.appendChild(c);
+      const c2=document.createElementNS(SVGNS,"circle");
+      c2.setAttribute("cx",x);c2.setAttribute("cy",y);c2.setAttribute("r",5);
+      c2.setAttribute("fill","#9fca84");g.appendChild(c2);
+    });
+    const m=$("marks");
+    PLACES.forEach(p=>{
+      const dot=document.createElementNS(SVGNS,"circle");
+      dot.setAttribute("cx",p.x);dot.setAttribute("cy",p.y);dot.setAttribute("r",3.2);
+      dot.setAttribute("fill","#fff");dot.setAttribute("stroke","#9aa0a6");dot.setAttribute("stroke-width",1.4);
+      m.appendChild(dot);
+      const t=document.createElementNS(SVGNS,"text");
+      t.setAttribute("x",p.x);t.setAttribute("y",p.y-6);t.setAttribute("text-anchor","middle");
+      t.setAttribute("font-size","8");t.setAttribute("font-weight","700");t.setAttribute("fill","#5a6068");
+      t.textContent=p.n;m.appendChild(t);
+    });
+  })();
 
-    $("loc").textContent = d.loc;
-    $("activity").innerHTML = "Currently " + d.act;
-    $("coords").textContent = d.coords;
-    $("seen").textContent = lost ? (2+Math.floor(Math.random()*58))+" min ago" : "just now";
-    $("conf").textContent = (lost ? 11+Math.floor(Math.random()*20) : 78+Math.floor(Math.random()*21)) + "%";
-    $("conf").className = "v " + (lost ? "red" : "green");
-    $("status").textContent = d.status;
-    setStatusColor($("status"), d.status);
-    $("speed").textContent = (Math.random()<.5 ? "0.0" : (Math.random()*60).toFixed(1)) + " mph";
-    $("acc").textContent = lost ? "±"+(200+Math.floor(Math.random()*8000))+"m" : "±"+(1+Math.floor(Math.random()*9))+"m";
+  // ---- ui refs ----
+  const trailEl=$("trail"), meEl=$("me");
+  function redrawTrail(){ trailEl.setAttribute("points", S.trail.map(p=>p[0].toFixed(1)+","+p[1].toFixed(1)).join(" ")); }
+  function fmtTime(sec){ sec=Math.round(sec); const h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),s=sec%60;
+    return h? h+":"+String(m).padStart(2,"0")+":"+String(s).padStart(2,"0") : m+":"+String(s).padStart(2,"0"); }
+  function clockAt(sec){ return new Date(S.start+sec*1000).toLocaleTimeString([], {hour:"numeric",minute:"2-digit"}); }
 
-    const blip = $("blip");
-    blip.style.left = (15 + Math.random()*70) + "%";
-    blip.style.top  = (18 + Math.random()*64) + "%";
-    blip.classList.toggle("lost", lost);
-    $("tag").textContent = lost ? "PETER?" : "PETER";
+  function stats(){
+    const mi=S.distPx*MI_PER_PX;
+    const moving=mi*PACE_SEC;
+    $("sDist").innerHTML=mi.toFixed(2)+'<small>mi</small>';
+    $("sTime").textContent=fmtTime(moving);
+    $("sPace").textContent= mi>0.01 ? fmtTime(PACE_SEC)+"/mi" : "—";
+    $("sElev").innerHTML=Math.round(S.elevFt)+'<small>ft</small>';
   }
 
-  const btn = $("btn"), map = $("map");
-  btn.addEventListener("click", () => {
-    btn.disabled = true;
-    map.classList.add("busy");
-    btn.textContent = "🛰️ TRIANGULATING…";
-    setTimeout(() => {
-      update();
-      map.classList.remove("busy");
-      btn.disabled = false;
-      btn.textContent = "📍 RE-LOCATE PETER";
-    }, 1300);
-  });
+  function renderFeed(){
+    const f=$("feed"); f.innerHTML="";
+    S.events.slice().reverse().forEach(ev=>{
+      const li=document.createElement("li"); li.className="ev";
+      li.innerHTML=`<div class="ic">${ev.e}</div><div class="body">
+        <div class="top"><span class="nm">${ev.n}</span><span class="tm">${ev.clock}</span></div>
+        <div class="nt">${ev.note}</div>
+        <div class="dm">${ev.mi.toFixed(2)} mi in${ev.visit>1?` · stop #${ev.visit} here`:""}</div>
+      </div>`;
+      f.appendChild(li);
+    });
+    if(!S.events.length){ f.innerHTML='<li class="ev"><div class="ic">🚶</div><div class="body"><div class="nm">Just getting started…</div><div class="nt">Peter is walking. Lines will appear as he wanders.</div></div></li>'; }
+  }
 
-  // initial
-  update();
+  function logEvent(p){
+    S.visits[p.k]=(S.visits[p.k]||0)+1;
+    const note=p.notes[Math.floor(Math.random()*p.notes.length)];
+    const mi=S.distPx*MI_PER_PX, moving=mi*PACE_SEC;
+    S.events.push({n:p.n,e:p.e,note,clock:clockAt(moving+S.dwellSec),mi,visit:S.visits[p.k]});
+    if(S.events.length>60) S.events=S.events.slice(-60);
+    // achievement
+    if(S.visits[p.k]>=3){ S.ach=`Local Legend — past ${p.n} ${S.visits[p.k]}×`; }
+    renderFeed(); maybeAch();
+  }
+  function maybeAch(){ if(S.ach){ $("achTxt").textContent=S.ach; $("ach").classList.add("show"); } }
+
+  // ---- animation ----
+  let walking=true, resting=false, speedMult=1, restUntil=0, lastTrailPt=S.pos;
+  function setStatus(t){ $("status").textContent=t; }
+
+  redrawTrail(); stats(); renderFeed(); maybeAch();
+  meEl.setAttribute("transform",`translate(${S.pos.x},${S.pos.y})`);
+  $("actDate").textContent = new Date(S.start).toLocaleDateString([], {weekday:"long",month:"short",day:"numeric"})+" · a normal day";
+  setStatus("Walking toward "+byKey[S.target].n+"…");
+
+  function advance(dt){               // dt in seconds of simulated time
+    const tg=byKey[S.target];
+    const dx=tg.x-S.pos.x, dy=tg.y-S.pos.y, d=Math.hypot(dx,dy);
+    const move=BASE_SPEED*speedMult*dt;
+    if(d<=move || d<0.5){
+      S.distPx+=d; S.pos={x:tg.x,y:tg.y};
+      S.trail.push([tg.x,tg.y]); lastTrailPt={x:tg.x,y:tg.y};
+      if(S.trail.length>4000) S.trail=S.trail.slice(-3500);
+      arrive(tg);
+    } else {
+      S.pos.x+=dx/d*move; S.pos.y+=dy/d*move; S.distPx+=move;
+      if(Math.hypot(S.pos.x-lastTrailPt.x,S.pos.y-lastTrailPt.y)>=3){ S.trail.push([S.pos.x,S.pos.y]); lastTrailPt={x:S.pos.x,y:S.pos.y}; }
+    }
+    meEl.setAttribute("transform",`translate(${S.pos.x.toFixed(1)},${S.pos.y.toFixed(1)})`);
+    redrawTrail(); stats();
+  }
+  function arrive(p){
+    S.elevFt+=2+Math.random()*5;
+    S.dwellSec+=60+Math.random()*240;
+    logEvent(p);
+    setStatus("Hanging out at "+p.n+" 🚶");
+    resting=true; restUntil=performance.now()+(900/speedMult);
+    save();
+  }
+
+  // timer driver — keeps walking even when the tab is backgrounded (rAF would pause)
+  let last=performance.now();
+  setInterval(()=>{
+    const now=performance.now();
+    let dt=Math.min((now-last)/1000,0.1); last=now;
+    if(walking && !resting) advance(dt);
+    if(resting && now>=restUntil){
+      resting=false; S.cur=S.target; S.target=nextKey(S.cur);
+      setStatus("Walking toward "+byKey[S.target].n+"…"); save();
+    }
+  },33);
+
+  // verification hook — fast-forward the walk deterministically
+  window.__peter={ pump(seconds){ let t=0; const step=0.05;
+    while(t<seconds){ if(!resting) advance(step); else { resting=false; S.cur=S.target; S.target=nextKey(S.cur);} t+=step; }
+    return {mi:(S.distPx*MI_PER_PX).toFixed(2), pts:S.trail.length, events:S.events.length}; },
+    state:()=>S };
+
+  // ---- controls ----
+  $("pause").addEventListener("click",()=>{ walking=!walking;
+    $("pause").innerHTML=walking?"⏸ Pause":"▶ Resume";
+    $("liveState").textContent=walking?"LIVE":"PAUSED";
+    setStatus(walking?("Walking toward "+byKey[S.target].n+"…"):"Paused. Peter is just standing there."); });
+  $("speed").addEventListener("click",()=>{ speedMult = speedMult===1?3:(speedMult===3?6:1);
+    $("speed").textContent="⏩ "+speedMult+"×"; });
+  $("reset").addEventListener("click",()=>{
+    if(!confirm("Erase Peter's entire walking history? The lines will be gone forever.")) return;
+    localStorage.removeItem(KEY); S=fresh(); lastTrailPt=S.pos; S.ach="";
+    $("ach").classList.remove("show");
+    redrawTrail(); stats(); renderFeed();
+    meEl.setAttribute("transform",`translate(${S.pos.x},${S.pos.y})`);
+    setStatus("Fresh start. Walking toward "+byKey[S.target].n+"…"); save(); });
+  $("follow").addEventListener("click",()=>{ const b=$("follow"); b.classList.toggle("on");
+    b.textContent=b.classList.contains("on")?"Following":"Follow"; });
+  $("kudos").addEventListener("click",()=>{ S.kudos++; $("kCount").textContent=S.kudos; save(); });
+  $("kCount").textContent=S.kudos;
+
+  // periodic save so the trail survives a tab close mid-walk
+  setInterval(save, 4000);
+  window.addEventListener("beforeunload", save);
+})();
 </script>
 </body>
 </html>
