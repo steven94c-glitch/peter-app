@@ -1,0 +1,13 @@
+{
+  "name": "PeterApp",
+  "short_name": "PeterApp",
+  "description": "Everywhere he goes. He is the app. The app is him.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

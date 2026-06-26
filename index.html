@@ -2,179 +2,161 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>PeterApp — He goes everywhere.</title>
-<meta name="description" content="Introducing PeterApp. He goes everywhere. It follows him everywhere. He is the app. The app is him." />
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📍</text></svg>" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+<title>PeterApp</title>
+<meta name="description" content="PeterApp. Everywhere he goes. He is the app. The app is him." />
+<link rel="manifest" href="/manifest.webmanifest" />
+<meta name="theme-color" content="#ffffff" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="PeterApp" />
+<link rel="apple-touch-icon" href="/icon.svg" />
+<link rel="icon" href="/icon.svg" />
 <style>
   :root{
-    --blue:#0071e3; --blue-d:#0060c8; --link:#0066cc; --sky:#2997ff;
-    --ink:#1d1d1f; --muted:#6e6e73; --hair:#d2d2d7;
-    --gray:#f5f5f7; --white:#fff;
+    --blue:#0071e3; --blue-d:#0060c8; --sky:#2997ff;
+    --ink:#1d1d1f; --muted:#6e6e73; --hair:#e3e3e8;
+    --gray:#f2f2f6; --white:#fff;
     --mono:'SF Mono',ui-monospace,Menlo,Consolas,monospace;
-    --sans:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',Helvetica,Arial,sans-serif;
+    --sans:-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display','Helvetica Neue',Helvetica,Arial,sans-serif;
   }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{font-family:var(--sans);color:var(--ink);background:var(--white);
-    -webkit-font-smoothing:antialiased;line-height:1.5}
-  a{color:var(--link);text-decoration:none}
-  a:hover{text-decoration:underline}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{font-family:var(--sans);color:var(--ink);background:#e7e7ec;-webkit-font-smoothing:antialiased;line-height:1.45}
   .blue{color:var(--blue)}
-  .grad{background:linear-gradient(92deg,#2997ff 0%,#0071e3 48%,#6e5bff 100%);
-    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .grad{background:linear-gradient(92deg,#2997ff,#0071e3 55%,#6e5bff);-webkit-background-clip:text;background-clip:text;color:transparent}
 
-  .nav{position:sticky;top:0;z-index:50;height:44px;
-    background:rgba(251,251,253,.78);backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid rgba(0,0,0,.08)}
-  .nav .row{max-width:980px;margin:0 auto;height:44px;display:flex;align-items:center;padding:0 22px;font-size:12px;color:#1d1d1fcc}
-  .nav a{color:#1d1d1fcc;font-weight:400;padding:0 11px;line-height:44px}
-  .nav a:hover{color:#1d1d1f;text-decoration:none}
-  .nav .logo{font-size:17px;padding-right:14px}
-  .nav .sp{flex:1}
-  .nav .ico{font-size:13px;padding:0 9px}
-  @media(max-width:720px){.nav .hidem{display:none}}
+  /* app shell */
+  .app{display:flex;flex-direction:column;width:100%;height:100dvh;background:#fff;overflow:hidden;position:relative}
+  @media(min-width:540px){
+    body{display:flex;align-items:center;justify-content:center;padding:24px}
+    .app{max-width:420px;height:min(900px,94dvh);border-radius:46px;border:1px solid #d3d3da;
+      box-shadow:0 50px 90px -34px rgba(0,0,0,.55)}
+  }
 
-  .subnav{position:sticky;top:44px;z-index:49;height:48px;
-    background:rgba(251,251,253,.82);backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid rgba(0,0,0,.1)}
-  .subnav .row{max-width:980px;margin:0 auto;height:48px;display:flex;align-items:center;padding:0 22px}
-  .subnav .pname{font-size:21px;font-weight:600;letter-spacing:-.01em}
-  .subnav .links{display:flex;margin-left:26px;flex:1}
-  .subnav .links a{font-size:12px;color:var(--muted);padding:0 11px}
-  .subnav .links a:hover{color:var(--ink);text-decoration:none}
-  .buy{background:var(--blue);color:#fff!important;font-size:12px;font-weight:500;padding:5px 14px;border-radius:980px;line-height:1.4;cursor:pointer;border:0}
-  .buy:hover{background:var(--blue-d);text-decoration:none!important}
-  .buy.done{background:#34c759}
-  @media(max-width:720px){.subnav .links{display:none}}
-
-  .hero{text-align:center;padding:54px 22px 30px;background:var(--white)}
-  .eyebrow{color:var(--blue);font-size:21px;font-weight:600;letter-spacing:-.01em}
-  .hero h1{font-size:clamp(40px,8vw,72px);font-weight:700;letter-spacing:-.02em;line-height:1.04;margin:6px 0 4px}
-  .hero .tag{font-size:clamp(21px,4.4vw,30px);font-weight:600;letter-spacing:-.01em;line-height:1.12}
-  .hero .sub{color:var(--muted);font-size:17px;margin-top:16px;max-width:560px;margin-left:auto;margin-right:auto}
-  .hero .links{margin-top:14px;font-size:17px;display:flex;gap:26px;justify-content:center;flex-wrap:wrap}
-  .hero .links a::after{content:' ›'}
-  .price{color:var(--muted);font-size:13px;margin-top:18px}
-
-  .stage{background:var(--gray);padding:30px 22px 40px;text-align:center}
-  .device{max-width:480px;margin:0 auto;background:#fff;border-radius:22px;overflow:hidden;
-    box-shadow:0 2px 6px rgba(0,0,0,.04),0 30px 60px -30px rgba(0,0,0,.35);border:1px solid rgba(0,0,0,.06)}
-  .mapwrap{position:relative;background:#e6e9ec}
-  svg.map{display:block;width:100%;height:auto}
-  .status{position:absolute;left:10px;top:10px;background:rgba(0,0,0,.72);color:#fff;font-family:var(--mono);font-size:11px;padding:5px 10px;border-radius:8px;backdrop-filter:blur(3px);max-width:82%}
-  .livepill{position:absolute;right:10px;top:10px;background:rgba(255,255,255,.92);font-family:var(--mono);font-size:10px;font-weight:700;color:var(--blue);padding:4px 9px;border-radius:999px;display:flex;align-items:center;gap:5px;border:1px solid rgba(0,0,0,.06)}
+  /* app bar */
+  .appbar{padding-top:env(safe-area-inset-top);background:rgba(255,255,255,.86);
+    backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--hair);z-index:6;user-select:none}
+  .bar{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 18px}
+  .brand{font-size:20px;font-weight:700;letter-spacing:-.02em}
+  .livepill{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--blue);
+    background:#eaf3fe;border-radius:999px;padding:4px 10px;display:flex;align-items:center;gap:6px}
   .livepill .d{width:6px;height:6px;border-radius:50%;background:var(--blue);animation:blink 1.3s infinite}
-  .ach{position:absolute;right:10px;bottom:10px;background:rgba(255,255,255,.95);border:1px solid rgba(0,0,0,.08);font-size:11px;font-weight:600;color:#0060c8;padding:5px 9px;border-radius:8px;display:none;align-items:center;gap:5px}
+  .livepill.off{color:var(--muted);background:var(--gray)} .livepill.off .d{background:var(--muted);animation:none}
+
+  /* body / screens */
+  .body{flex:1;position:relative;overflow:hidden}
+  .screen{display:none;position:absolute;inset:0}
+  .screen.show{display:flex;flex-direction:column}
+  .scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:18px 16px calc(20px + env(safe-area-inset-bottom))}
+  .lgtitle{font-size:30px;font-weight:800;letter-spacing:-.02em;margin:4px 2px 16px}
+  .lgtitle span{font-size:15px;font-weight:600;color:var(--muted);letter-spacing:0}
+  .seclabel{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin:22px 2px 10px}
+
+  /* MAP screen */
+  #screen-map.show{display:flex;flex-direction:column}
+  .mapview{flex:1;position:relative;background:#e6e9ec;overflow:hidden}
+  .mapview svg{position:absolute;inset:0;width:100%;height:100%}
+  .mapctrl{position:absolute;top:14px;right:14px;display:flex;flex-direction:column;gap:9px;z-index:3}
+  .mapctrl button{width:42px;height:42px;border-radius:50%;border:1px solid rgba(0,0,0,.05);
+    background:rgba(255,255,255,.96);font-size:15px;font-weight:700;color:var(--ink);
+    box-shadow:0 6px 16px rgba(0,0,0,.16);cursor:pointer}
+  .ach{position:absolute;left:14px;top:14px;background:rgba(255,255,255,.96);border:1px solid rgba(0,0,0,.06);
+    font-size:11.5px;font-weight:700;color:#0060c8;padding:7px 11px;border-radius:11px;
+    box-shadow:0 6px 16px rgba(0,0,0,.12);display:none;align-items:center;gap:6px;max-width:70%}
   .ach.show{display:flex}
-  .reax{display:flex;align-items:center;gap:14px;padding:11px 16px;border-top:1px solid var(--hair);font-size:13px;color:var(--muted)}
-  .reax b{color:var(--ink)}
-  .reax .kudos{cursor:pointer;user-select:none}
-  .cap{color:var(--muted);font-size:13px;margin-top:16px}
+  .nowcard{position:absolute;left:12px;right:12px;bottom:12px;background:rgba(255,255,255,.97);
+    backdrop-filter:blur(12px);border-radius:20px;padding:15px 16px;
+    box-shadow:0 14px 36px -10px rgba(0,0,0,.34);border:1px solid rgba(0,0,0,.05);z-index:3}
+  .nowtop{display:flex;gap:12px;align-items:center}
+  .dotpin{width:42px;height:42px;border-radius:13px;background:#eaf3fe;display:flex;align-items:center;justify-content:center;font-size:21px;flex:none}
+  .nowtitle{font-weight:700;font-size:16.5px;letter-spacing:-.01em;line-height:1.2}
+  .nowsub{color:var(--muted);font-size:13px;margin-top:2px}
+  .chips{display:flex;gap:8px;margin-top:12px}
+  .chip{background:var(--gray);border-radius:999px;padding:6px 12px;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .chip b{color:var(--ink);font-weight:700}
 
-  .ctrl{max-width:480px;margin:16px auto 0;display:flex;gap:8px}
-  .ctrl button{flex:1;border:1px solid var(--hair);background:#fff;border-radius:980px;padding:9px;font-weight:500;font-size:13px;cursor:pointer;color:var(--ink)}
-  .ctrl button:hover{background:#fafafc}
-  .ctrl button.primary{background:var(--blue);border-color:var(--blue);color:#fff}
-  .ctrl button.primary:hover{background:var(--blue-d)}
+  /* stat grid */
+  .statgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .stat{background:var(--gray);border-radius:16px;padding:15px 14px}
+  .stat .v{font-size:25px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .stat .v small{font-size:13px;font-weight:700;color:var(--muted)}
+  .stat .k{font-size:12px;color:var(--muted);margin-top:3px}
+  .achrow{margin-top:12px;background:#fff7e6;border:1px solid #f3e2bb;color:#8a5a00;
+    border-radius:14px;padding:11px 13px;font-size:13.5px;font-weight:700;display:none;align-items:center;gap:8px}
+  .achrow.show{display:flex}
 
-  .statement{padding:80px 22px;text-align:center}
-  .statement h2{font-size:clamp(30px,6vw,52px);font-weight:700;letter-spacing:-.02em;line-height:1.07;max-width:780px;margin:0 auto}
-  .statement p{color:var(--muted);font-size:19px;margin:16px auto 0;max-width:600px}
-  .statement .links{margin-top:16px;font-size:18px}
-  .statement .links a::after{content:' ›'}
-  .statement.alt{background:var(--gray)}
-
-  .specs{background:#fff;padding:64px 22px;border-top:1px solid var(--hair)}
-  .specs h2{text-align:center;font-size:clamp(28px,5vw,40px);font-weight:700;letter-spacing:-.02em;margin-bottom:8px}
-  .specs .note{text-align:center;color:var(--muted);font-size:15px;margin-bottom:34px}
-  .specgrid{display:grid;grid-template-columns:repeat(4,1fr);max-width:760px;margin:0 auto 30px;border:1px solid var(--hair);border-radius:16px;overflow:hidden}
-  .specgrid .b{padding:20px 14px;text-align:center;border-right:1px solid var(--hair)}
-  .specgrid .b:last-child{border-right:0}
-  .specgrid .v{font-size:24px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
-  .specgrid .v small{font-size:13px;font-weight:600;color:var(--muted)}
-  .specgrid .k{font-size:12px;color:var(--muted);margin-top:4px}
-  .specrows{max-width:680px;margin:0 auto}
-  .specrow{display:flex;justify-content:space-between;gap:20px;padding:16px 4px;border-top:1px solid var(--hair);font-size:15px}
-  .specrow .l{color:var(--muted)}.specrow .r{font-weight:600;text-align:right}
-  @media(max-width:620px){.specgrid{grid-template-columns:repeat(2,1fr)}
-    .specgrid .b:nth-child(2){border-right:0}.specgrid .b:nth-child(1),.specgrid .b:nth-child(2){border-bottom:1px solid var(--hair)}}
-
-  .history{background:var(--gray);padding:64px 22px}
-  .history h2{text-align:center;font-size:clamp(28px,5vw,40px);font-weight:700;letter-spacing:-.02em}
-  .history .note{text-align:center;color:var(--muted);font-size:15px;margin:8px 0 30px}
-  .feed{list-style:none;max-width:600px;margin:0 auto}
-  .ev{display:flex;gap:13px;padding:15px 16px;background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:16px;margin-bottom:10px;align-items:flex-start;animation:rise .35s ease}
-  .ev .ic{width:38px;height:38px;border-radius:11px;background:var(--gray);display:flex;align-items:center;justify-content:center;font-size:20px;flex:none}
-  .ev .body{flex:1;min-width:0}
+  /* feed */
+  .feed{list-style:none}
+  .ev{display:flex;gap:13px;padding:14px 14px;background:var(--gray);border-radius:16px;margin-bottom:9px;align-items:flex-start;animation:rise .3s ease}
+  .ev .ic{width:40px;height:40px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;flex:none}
+  .ev .b{flex:1;min-width:0}
   .ev .top{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
-  .ev .nm{font-weight:600;font-size:15px}
+  .ev .nm{font-weight:700;font-size:15px}
   .ev .tm{font-family:var(--mono);font-size:11px;color:var(--muted);flex:none}
-  .ev .nt{font-size:14px;color:var(--muted);margin-top:2px;line-height:1.4}
-  .ev .dm{font-family:var(--mono);font-size:11px;color:var(--blue);font-weight:600;margin-top:5px}
+  .ev .nt{font-size:13.5px;color:var(--muted);margin-top:2px}
+  .ev .dm{font-family:var(--mono);font-size:11px;color:var(--blue);font-weight:700;margin-top:5px}
 
-  footer{background:var(--gray);color:var(--muted);font-size:12px;line-height:1.5;border-top:1px solid var(--hair);padding:24px 22px 40px}
-  footer .legal{max-width:980px;margin:0 auto;border-bottom:1px solid var(--hair);padding-bottom:18px}
-  footer .legal p{margin-bottom:9px}
-  footer .cols{max-width:980px;margin:18px auto 0;display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-  footer .cols h4{color:var(--ink);font-size:12px;margin-bottom:8px}
-  footer .cols a{color:var(--muted);display:block;padding:3px 0}
-  footer .copy{max-width:980px;margin:20px auto 0;border-top:1px solid var(--hair);padding-top:14px}
-  @media(max-width:620px){footer .cols{grid-template-columns:repeat(2,1fr)}}
+  /* specs */
+  .specrow{display:flex;justify-content:space-between;gap:16px;padding:14px 4px;border-bottom:1px solid var(--hair);font-size:14.5px}
+  .specrow:first-child{border-top:1px solid var(--hair)}
+  .specrow .l{color:var(--muted)}.specrow .r{font-weight:600;text-align:right}
+
+  /* peter / profile */
+  .prof{display:flex;flex-direction:column;align-items:center;text-align:center;padding-top:10px}
+  .ava{width:78px;height:78px;border-radius:50%;background:linear-gradient(135deg,#5ab0ff,var(--blue));
+    color:#fff;font-size:34px;font-weight:800;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 10px 24px -8px rgba(0,113,227,.6)}
+  .prof .nm{font-size:24px;font-weight:800;letter-spacing:-.02em;margin-top:12px}
+  .prof .sub{color:var(--muted);font-size:14px;margin-top:2px}
+  .tagcard{background:var(--gray);border-radius:18px;padding:20px;text-align:center;margin-top:20px}
+  .tagcard h2{font-size:22px;font-weight:800;letter-spacing:-.02em;line-height:1.15}
+  .tagcard p{color:var(--muted);font-size:14px;margin-top:8px}
+  .btn{width:100%;border:0;border-radius:14px;padding:15px;font-size:16px;font-weight:700;
+    color:#fff;background:var(--blue);cursor:pointer;margin-top:16px}
+  .btn.done{background:#34c759}
+  .reax{display:flex;align-items:center;gap:16px;justify-content:center;margin-top:16px;font-size:14px;color:var(--muted)}
+  .reax b{color:var(--ink)} .reax .kudos{cursor:pointer;user-select:none}
+  .reax .cmt{font-style:italic}
+  .blurb{color:var(--muted);font-size:13.5px;text-align:center;margin-top:22px;line-height:1.6}
+  .resetbtn{width:100%;border:1px solid var(--hair);background:#fff;border-radius:14px;padding:13px;
+    font-size:14px;font-weight:600;color:#d11;cursor:pointer;margin-top:18px}
+  .fine{font-size:11px;color:#9a9aa2;line-height:1.55;margin-top:18px;text-align:center}
+
+  /* tab bar */
+  .tabbar{padding-bottom:env(safe-area-inset-bottom);background:rgba(255,255,255,.92);
+    backdrop-filter:saturate(180%) blur(20px);border-top:1px solid var(--hair);z-index:6;user-select:none}
+  .tabrow{display:flex}
+  .tab{flex:1;border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:3px;
+    padding:9px 0 6px;color:var(--muted);font-size:10px;font-weight:600;cursor:pointer}
+  .tab.active{color:var(--blue)}
+  .tab svg{width:25px;height:25px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 
   @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
   @keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 </style>
 </head>
 <body>
+<div class="app">
 
-  <nav class="nav"><div class="row">
-    <span class="logo">📍</span>
-    <a href="#" class="hidem">Store</a>
-    <a href="#stage" class="hidem">Live</a>
-    <a href="#specs" class="hidem">Whereabouts</a>
-    <a href="#history" class="hidem">History</a>
-    <a href="#" class="hidem">Support</a>
-    <span class="sp"></span>
-    <span class="ico">🔍</span><span class="ico">🛍️</span>
-  </div></nav>
+  <header class="appbar"><div class="bar">
+    <div class="brand">Peter<span class="blue">App</span></div>
+    <div class="livepill" id="livepill"><span class="d"></span><span id="liveState">LIVE</span></div>
+  </div></header>
 
-  <div class="subnav"><div class="row">
-    <span class="pname">Peter<span class="blue">App</span></span>
-    <div class="links">
-      <a href="#stage">Overview</a>
-      <a href="#specs">Tech Specs</a>
-      <a href="#history">Where He's Been</a>
-    </div>
-    <button class="buy" id="follow">Buy</button>
-  </div></div>
+  <div class="body">
 
-  <section class="hero">
-    <div class="eyebrow">Peter<span class="grad">App</span></div>
-    <h1>Everywhere <span class="grad">he goes.</span></h1>
-    <div class="tag">He is the app. The app is him.</div>
-    <div class="sub">Always on. Always him. There's no login, no setup, and no off switch — we looked. Wherever Peter goes, PeterApp is already there. Because it's Peter.</div>
-    <div class="links">
-      <a href="#stage">Watch him live</a>
-      <a href="#history">See where he's been</a>
-    </div>
-    <div class="price">From $0/mo. for 36&nbsp;mo.* &nbsp;·&nbsp; Peter is not, and never will be, aware of this page.</div>
-  </section>
-
-  <section class="stage" id="stage">
-    <div class="device">
-      <div class="mapwrap">
-        <svg class="map" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+    <!-- MAP -->
+    <section class="screen show" id="screen-map">
+      <div class="mapview">
+        <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
           <rect width="400" height="300" fill="#e6e9ec"/>
-          <!-- parks -->
           <ellipse cx="320" cy="120" rx="34" ry="22" fill="#cfe3c2"/>
           <ellipse cx="150" cy="250" rx="40" ry="24" fill="#cfe3c2"/>
-          <!-- roads (built by JS into #roads) -->
           <g id="roads"></g>
-          <!-- river -->
-          <path d="M170,-6 C195,55 145,105 188,158 C228,206 320,196 360,258 C372,283 388,300 402,312"
-            fill="none" stroke="#aadcf2" stroke-width="24" stroke-linecap="round"/>
-          <path d="M170,-6 C195,55 145,105 188,158 C228,206 320,196 360,258 C372,283 388,300 402,312"
-            fill="none" stroke="#bfe6f6" stroke-width="13" stroke-linecap="round"/>
-          <!-- Peter's trail -->
+          <path d="M170,-6 C195,55 145,105 188,158 C228,206 320,196 360,258 C372,283 388,300 402,312" fill="none" stroke="#aadcf2" stroke-width="24" stroke-linecap="round"/>
+          <path d="M170,-6 C195,55 145,105 188,158 C228,206 320,196 360,258 C372,283 388,300 402,312" fill="none" stroke="#bfe6f6" stroke-width="13" stroke-linecap="round"/>
           <polyline id="trail" fill="none" stroke="#0071e3" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round" opacity="0.92" points=""/>
           <g id="marks"></g>
           <g id="me" transform="translate(80,150)">
@@ -185,87 +167,95 @@
             <circle r="6" fill="#0071e3" stroke="#fff" stroke-width="2.5"/>
           </g>
         </svg>
-        <div class="status" id="status">Booting Peter…</div>
-        <div class="livepill"><span class="d"></span><span id="liveState">LIVE</span></div>
         <div class="ach" id="ach"><span>🏆</span><span id="achTxt"></span></div>
+        <div class="mapctrl">
+          <button id="pause">⏸</button>
+          <button id="speed">1×</button>
+        </div>
+        <div class="nowcard">
+          <div class="nowtop">
+            <div class="dotpin">📍</div>
+            <div><div class="nowtitle" id="status">Locating Peter…</div><div class="nowsub" id="mapNote">Booting up his entire existence.</div></div>
+          </div>
+          <div class="chips">
+            <span class="chip"><b id="mapMiles">0.00</b> mi today</span>
+            <span class="chip"><b id="mapStops">0</b> stops</span>
+          </div>
+        </div>
       </div>
-      <div class="reax">
-        <span class="kudos" id="kudos">👍 <b id="kCount">3</b> Likes</span>
-        <span>💬 <b>1</b></span>
-        <span style="margin-left:auto;font-style:italic" id="comment">"It just works." — nobody</span>
+    </section>
+
+    <!-- ACTIVITY -->
+    <section class="screen" id="screen-activity">
+      <div class="scroll">
+        <div class="lgtitle">Today<span id="actDate"></span></div>
+        <div class="statgrid">
+          <div class="stat"><div class="v" id="sDist">0.00<small>mi</small></div><div class="k">Distance today</div></div>
+          <div class="stat"><div class="v" id="sTime">0:00</div><div class="k">Moving time</div></div>
+          <div class="stat"><div class="v" id="sPace">—</div><div class="k">Pace</div></div>
+          <div class="stat"><div class="v" id="sElev">0<small>ft</small></div><div class="k">Elevation</div></div>
+        </div>
+        <div class="achrow" id="achrow"><span>🏆</span><span id="achTxt2"></span></div>
+        <div class="seclabel">Where he's been</div>
+        <ul class="feed" id="feed"></ul>
       </div>
-    </div>
-    <div class="cap"><span id="actTitle">Peter, live</span> · <span id="actDate">today</span>, all day. Shown actual size, actual aimlessness.</div>
-    <div class="ctrl">
-      <button class="primary" id="pause">⏸ Pause</button>
-      <button id="speed">⏩ 1×</button>
-      <button id="reset">↺ Reset</button>
-    </div>
-  </section>
+    </section>
 
-  <section class="statement">
-    <h2>Goes everywhere.<br/><span class="grad">Accomplishes nothing.</span></h2>
-    <p>Wawa. The gym parking lot. His ex's block. Atlantic City. PeterApp follows him to every single one — for no particular reason, forever.</p>
-    <div class="links"><a href="#history">Follow the trail</a></div>
-  </section>
+    <!-- SPECS -->
+    <section class="screen" id="screen-specs">
+      <div class="scroll">
+        <div class="lgtitle">Tech Specs<span> · without his knowledge</span></div>
+        <div class="specrow"><span class="l">Coverage</span><span class="r">Everywhere. Literally everywhere.</span></div>
+        <div class="specrow"><span class="l">Chip</span><span class="r">A17 Pro (it's just his phone)</span></div>
+        <div class="specrow"><span class="l">Connectivity</span><span class="r">Left on read</span></div>
+        <div class="specrow"><span class="l">Water Resistance</span><span class="r">Cried once, in 2019</span></div>
+        <div class="specrow"><span class="l">Operating System</span><span class="r">Vibes 18</span></div>
+        <div class="specrow"><span class="l">Battery</span><span class="r">All-day. Will not go home.</span></div>
+        <div class="specrow"><span class="l">Off Switch</span><span class="r">None found</span></div>
+        <div class="specrow"><span class="l">In the Box</span><span class="r">A pretzel, $6, regret</span></div>
+      </div>
+    </section>
 
-  <section class="statement alt">
-    <h2>He is the app.<br/><span class="grad">The app is him.</span></h2>
-    <p>There's nothing to install and nothing to open. PeterApp isn't something Peter uses — PeterApp is Peter. We checked twice. You cannot turn him off.</p>
-  </section>
+    <!-- PETER -->
+    <section class="screen" id="screen-peter">
+      <div class="scroll">
+        <div class="prof">
+          <div class="ava">P</div>
+          <div class="nm">Peter</div>
+          <div class="sub">Live · Philadelphia · does not know</div>
+        </div>
+        <div class="tagcard">
+          <h2>He is the app.<br/><span class="grad">The app is him.</span></h2>
+          <p>There's no login, no setup, and no off switch. Wherever Peter goes, PeterApp is already there. Because it's Peter.</p>
+        </div>
+        <button class="btn" id="follow">Buy</button>
+        <div class="reax">
+          <span class="kudos" id="kudos">👍 <b id="kCount">3</b> Likes</span>
+          <span>💬 <b>1</b></span>
+          <span class="cmt" id="comment">"It just works." — nobody</span>
+        </div>
+        <div class="blurb"><b>Goes everywhere. Accomplishes nothing.</b><br/>Wawa, the gym parking lot, his ex's block, Atlantic City — PeterApp follows him to all of them, forever.</div>
+        <button class="resetbtn" id="reset">Erase everywhere he's been</button>
+        <div class="fine">From $0/mo. for 36 mo.* · Peter is not for sale. He has not consented to being tracked and remains unaware that this app exists. A parody, not affiliated with Apple Inc. or Peter.</div>
+      </div>
+    </section>
 
-  <section class="statement">
-    <h2>There is no off switch.†</h2>
-    <p>It keeps running even when you close this tab. His trail saves right here on your device and keeps growing. He will not go home — and home is a couch he's barely at anyway.</p>
-  </section>
+  </div>
 
-  <section class="specs" id="specs">
-    <h2>Tech Specs</h2>
-    <div class="note">Live telemetry, updated continuously, without his knowledge.</div>
-    <div class="specgrid">
-      <div class="b"><div class="v" id="sDist">0.00<small>mi</small></div><div class="k">Distance Today</div></div>
-      <div class="b"><div class="v" id="sTime">0:00</div><div class="k">Moving Time</div></div>
-      <div class="b"><div class="v" id="sPace">—</div><div class="k">Pace</div></div>
-      <div class="b"><div class="v" id="sElev">0<small>ft</small></div><div class="k">Elevation</div></div>
-    </div>
-    <div class="specrows">
-      <div class="specrow"><span class="l">Coverage</span><span class="r">Everywhere. Literally everywhere.</span></div>
-      <div class="specrow"><span class="l">Chip</span><span class="r">A17 Pro (it's just his phone)</span></div>
-      <div class="specrow"><span class="l">Connectivity</span><span class="r">Left on read</span></div>
-      <div class="specrow"><span class="l">Water Resistance</span><span class="r">Cried once, in 2019</span></div>
-      <div class="specrow"><span class="l">Operating System</span><span class="r">Vibes 18</span></div>
-      <div class="specrow"><span class="l">Off Switch</span><span class="r">None found</span></div>
-      <div class="specrow"><span class="l">In the Box</span><span class="r">A pretzel, $6, regret</span></div>
-    </div>
-  </section>
+  <nav class="tabbar"><div class="tabrow">
+    <button class="tab active" data-t="map"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><span>Map</span></button>
+    <button class="tab" data-t="activity"><svg viewBox="0 0 24 24"><path d="M3 12h4l2 6 4-15 2.5 9H21"/></svg><span>Activity</span></button>
+    <button class="tab" data-t="specs"><svg viewBox="0 0 24 24"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><circle cx="10" cy="9" r="2.4" fill="currentColor" stroke="none"/><circle cx="15" cy="15" r="2.4" fill="currentColor" stroke="none"/></svg><span>Specs</span></button>
+    <button class="tab" data-t="peter"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></svg><span>Peter</span></button>
+  </div></nav>
 
-  <section class="history" id="history">
-    <h2>Where he's been</h2>
-    <div class="note">Everywhere. The lines stay on the map.</div>
-    <ul class="feed" id="feed"></ul>
-  </section>
-
-  <footer>
-    <div class="legal">
-      <p>* Pricing shown for comedic purposes. Peter is a human being and is not for sale, lease, or trade-in.</p>
-      <p>† Battery life varies with use, snack availability, and whether anyone texts him back. Peter has not consented to being tracked and remains unaware that this page exists.</p>
-      <p>Trail and history data are stored only on your device. "PeterApp," "Local Legend," and "It just works" are not trademarks of anyone, least of all Peter. This is a parody and is not affiliated with, endorsed by, or in any way connected to Apple Inc. or Peter.</p>
-    </div>
-    <div class="cols">
-      <div><h4>Shop Peter</h4><a href="#">Buy Peter</a><a href="#">Peter for Business</a><a href="#">Peter Trade In</a></div>
-      <div><h4>Whereabouts</h4><a href="#stage">Live Tracker</a><a href="#history">Trail History</a><a href="#specs">Tech Specs</a></div>
-      <div><h4>Frequent Stops</h4><a href="#">Wawa</a><a href="#">His Ex's Block</a><a href="#">The Couch</a></div>
-      <div><h4>About Peter</h4><a href="#">His Whole Deal</a><a href="#">Why</a><a href="#">Leave Him Alone</a></div>
-    </div>
-    <div class="copy">PeterApp™ · It follows him everywhere. He still doesn't know.</div>
-  </footer>
+</div>
 
 <script>
 (function(){
   const SVGNS="http://www.w3.org/2000/svg";
   const $=id=>document.getElementById(id);
 
-  // everywhere Peter actually goes
   const PLACES=[
     {k:"couch", n:"The Couch",            x:80, y:150, e:"🛋️", notes:["Has not moved in six hours.","Back on the couch. The couch missed him.","Lying down. Calling it 'recharging.'"]},
     {k:"wawa",  n:"Wawa",                 x:150,y:88,  e:"🥪", notes:["Got a Shorti. A classic.","Nine minutes at the touchscreen.","Came for a coffee, left with $40 of snacks."]},
@@ -284,7 +274,7 @@
 
   const MI_PER_PX=0.0009, PACE_SEC=1100, BASE_SPEED=46, KEY="peterPlus_v2";
   let S=load()||fresh();
-  if(!byKey[S.cur]||!byKey[S.target]){ S=fresh(); }   // guard against stale saved state
+  if(!byKey[S.cur]||!byKey[S.target]){ S=fresh(); }
 
   function fresh(){
     return {start:Date.now(), trail:[[80,150]], events:[], distPx:0, dwellSec:0, elevFt:0,
@@ -301,7 +291,7 @@
       l.setAttribute("stroke","#f4f6f7");l.setAttribute("stroke-width",w);l.setAttribute("stroke-linecap","round");roads.appendChild(l); }
     for(let x=32;x<=384;x+=40) line(x,-4,x,304,3);
     for(let y=30;y<=300;y+=40) line(-4,y,404,y,3);
-    line(20,250,380,70,5); line(40,40,360,280,5);   // a couple of bigger roads
+    line(20,250,380,70,5); line(40,40,360,280,5);
     const m=$("marks");
     PLACES.forEach(p=>{
       const dot=document.createElementNS(SVGNS,"circle");
@@ -320,6 +310,8 @@
   function fmtTime(sec){ sec=Math.round(sec); const h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),s=sec%60;
     return h? h+":"+String(m).padStart(2,"0")+":"+String(s).padStart(2,"0") : m+":"+String(s).padStart(2,"0"); }
   function clockAt(sec){ return new Date(S.start+sec*1000).toLocaleTimeString([], {hour:"numeric",minute:"2-digit"}); }
+  function setStatus(t){ $("status").textContent=t; }
+  function setNote(t){ $("mapNote").textContent=t; }
 
   function stats(){
     const mi=S.distPx*MI_PER_PX, moving=mi*PACE_SEC;
@@ -327,18 +319,20 @@
     $("sTime").textContent=fmtTime(moving);
     $("sPace").textContent= mi>0.01 ? fmtTime(PACE_SEC)+"/mi" : "—";
     $("sElev").innerHTML=Math.round(S.elevFt)+'<small>ft</small>';
+    $("mapMiles").textContent=mi.toFixed(2);
   }
   function renderFeed(){
     const f=$("feed"); f.innerHTML="";
     S.events.slice().reverse().forEach(ev=>{
       const li=document.createElement("li"); li.className="ev";
-      li.innerHTML=`<div class="ic">${ev.e}</div><div class="body">
+      li.innerHTML=`<div class="ic">${ev.e}</div><div class="b">
         <div class="top"><span class="nm">${ev.n}</span><span class="tm">${ev.clock}</span></div>
         <div class="nt">${ev.note}</div>
         <div class="dm">${ev.mi.toFixed(2)} mi in${ev.visit>1?` · stop #${ev.visit} here`:""}</div></div>`;
       f.appendChild(li);
     });
-    if(!S.events.length){ f.innerHTML='<li class="ev"><div class="ic">📍</div><div class="body"><div class="nm">Locating Peter…</div><div class="nt">He is on the move. Lines will appear as he goes.</div></div></li>'; }
+    if(!S.events.length){ f.innerHTML='<li class="ev"><div class="ic">📍</div><div class="b"><div class="nm">Locating Peter…</div><div class="nt">He is on the move. Lines will appear as he goes.</div></div></li>'; }
+    $("mapStops").textContent=S.events.length;
   }
   function logEvent(p){
     S.visits[p.k]=(S.visits[p.k]||0)+1;
@@ -347,17 +341,18 @@
     S.events.push({n:p.n,e:p.e,note,clock:clockAt(moving+S.dwellSec),mi,visit:S.visits[p.k]});
     if(S.events.length>60) S.events=S.events.slice(-60);
     if(S.visits[p.k]>=3) S.ach=`Local Legend — past ${p.n} ${S.visits[p.k]}×`;
-    renderFeed(); maybeAch();
+    setNote(note); renderFeed(); maybeAch();
   }
-  function maybeAch(){ if(S.ach){ $("achTxt").textContent=S.ach; $("ach").classList.add("show"); } }
+  function maybeAch(){ if(S.ach){ $("achTxt").textContent=S.ach; $("ach").classList.add("show");
+    $("achTxt2").textContent=S.ach; $("achrow").classList.add("show"); } }
 
   let walking=true, resting=false, speedMult=1, restUntil=0, lastTrailPt=S.pos;
-  function setStatus(t){ $("status").textContent=t; }
 
   redrawTrail(); stats(); renderFeed(); maybeAch();
   meEl.setAttribute("transform",`translate(${S.pos.x},${S.pos.y})`);
-  $("actDate").textContent = new Date(S.start).toLocaleDateString([], {weekday:"long",month:"short",day:"numeric"});
+  $("actDate").textContent=" · "+new Date(S.start).toLocaleDateString([], {weekday:"long",month:"short",day:"numeric"});
   setStatus("Headed to "+byKey[S.target].n+"…");
+  if(S.events.length) setNote(S.events[S.events.length-1].note);
 
   function advance(dt){
     const tg=byKey[S.target];
@@ -379,7 +374,7 @@
     S.elevFt+=2+Math.random()*5;
     S.dwellSec+=60+Math.random()*300;
     logEvent(p);
-    setStatus("Currently at "+p.n+" 📍");
+    setStatus("Currently at "+p.n);
     resting=true; restUntil=performance.now()+(900/speedMult);
     save();
   }
@@ -391,7 +386,7 @@
     if(walking && !resting) advance(dt);
     if(resting && now>=restUntil){
       resting=false; S.cur=S.target; S.target=nextKey(S.cur);
-      setStatus("Headed to "+byKey[S.target].n+"…"); save();
+      setStatus("Headed to "+byKey[S.target].n+"…"); setNote("On the move."); save();
     }
   },33);
 
@@ -399,22 +394,35 @@
     while(t<seconds){ if(!resting) advance(step); else { resting=false; S.cur=S.target; S.target=nextKey(S.cur);} t+=step; }
     return {mi:(S.distPx*MI_PER_PX).toFixed(2), pts:S.trail.length, events:S.events.length}; }, state:()=>S };
 
+  // controls
   $("pause").addEventListener("click",()=>{ walking=!walking;
-    $("pause").innerHTML=walking?"⏸ Pause":"▶ Resume";
+    $("pause").textContent=walking?"⏸":"▶";
     $("liveState").textContent=walking?"LIVE":"PAUSED";
-    setStatus(walking?("Headed to "+byKey[S.target].n+"…"):"Paused. Peter is just standing somewhere."); });
+    $("livepill").classList.toggle("off",!walking);
+    if(walking){ setStatus("Headed to "+byKey[S.target].n+"…"); } else { setStatus("Paused"); setNote("Peter is just standing somewhere."); } });
   $("speed").addEventListener("click",()=>{ speedMult = speedMult===1?3:(speedMult===3?6:1);
-    $("speed").textContent="⏩ "+speedMult+"×"; });
+    $("speed").textContent=speedMult+"×"; });
   $("reset").addEventListener("click",()=>{
     if(!confirm("Erase everywhere Peter has been? The lines will be gone forever.")) return;
     localStorage.removeItem(KEY); S=fresh(); lastTrailPt=S.pos; S.ach="";
-    $("ach").classList.remove("show"); redrawTrail(); stats(); renderFeed();
+    $("ach").classList.remove("show"); $("achrow").classList.remove("show");
+    redrawTrail(); stats(); renderFeed(); setNote("Fresh start.");
     meEl.setAttribute("transform",`translate(${S.pos.x},${S.pos.y})`);
-    setStatus("Fresh start. Headed to "+byKey[S.target].n+"…"); save(); });
+    setStatus("Headed to "+byKey[S.target].n+"…"); save(); });
   $("follow").addEventListener("click",()=>{ const b=$("follow");
     b.classList.toggle("done"); b.textContent=b.classList.contains("done")?"Pre-ordered ✓":"Buy"; });
   $("kudos").addEventListener("click",()=>{ S.kudos++; $("kCount").textContent=S.kudos; save(); });
   $("kCount").textContent=S.kudos;
+
+  // tabs
+  const tabs=[...document.querySelectorAll('.tab')];
+  const screens=[...document.querySelectorAll('.screen')];
+  tabs.forEach(b=>b.addEventListener('click',()=>{
+    const name=b.dataset.t;
+    screens.forEach(s=>s.classList.toggle('show', s.id==='screen-'+name));
+    tabs.forEach(t=>t.classList.toggle('active', t===b));
+    const sc=document.querySelector('#screen-'+name+' .scroll'); if(sc) sc.scrollTop=0;
+  }));
 
   setInterval(save,4000);
   window.addEventListener("beforeunload",save);
